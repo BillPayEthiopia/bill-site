@@ -1,26 +1,127 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* ============================================================
+   BRAND COLORS
+   =========================================================== */
+  
+@theme {
+  /* Brand colors, sampled from the official logo artwork.
+     The guideline (p.18) lists navy #21335E and aqua #6BD6DA,
+     but the logo files use the values below. */
+  --color-navy: #1b3461;
+  --color-blue: #3364aa;
+  --color-aqua: #37d8db;
+  --color-mortar: #595959; /* guideline grey, for body text */
+
+  /* Supporting tones derived from the brand colors.
+     NOT in the official guide; used only for surfaces and borders. */
+  --color-navy-950: #121f3d;
+  --color-navy-50: #eef2f8;
+  --color-blue-50: #eef3fa;
+  --color-aqua-50: #ecfbfb;
+  --color-surface: #f7f9fc;
+  --color-line: #e3e8f0;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+/* ============================================================
+   LAYOUT, TYPE SCALE, SHAPE, DEPTH, MOTION
+   ============================================================ */
+@theme {
+  /* max-w-page: content width for every section (1216px) */
+  --container-page: 76rem;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  /* text-display: hero headline. Scales smoothly with screen width. */
+  --text-display: clamp(2.75rem, 1.6rem + 4.2vw, 5rem);
+  --text-display--line-height: 1.04;
+  --text-display--letter-spacing: -0.025em;
+
+  /* text-heading: section headings */
+  --text-heading: clamp(2rem, 1.4rem + 2.2vw, 3.25rem);
+  --text-heading--line-height: 1.1;
+  --text-heading--letter-spacing: -0.02em;
+
+  /* rounded-card, rounded-panel */
+  --radius-card: 1.25rem;
+  --radius-panel: 2rem;
+
+  /* Shadows tinted with navy instead of black, so they feel on-brand */
+  --shadow-card: 0 1px 2px rgb(27 52 97 / 0.04), 0 8px 24px -8px rgb(27 52 97 / 0.1);
+  --shadow-float: 0 2px 6px rgb(27 52 97 / 0.05), 0 24px 60px -16px rgb(27 52 97 / 0.22);
+
+  /* ease-brand: fast start, gentle settle */
+  --ease-brand: cubic-bezier(0.22, 1, 0.36, 1);
+
+    /* Button hover shadows */
+  --shadow-lift: 0 12px 24px -10px rgb(27 52 97 / 0.45);
+  --shadow-glow: 0 12px 32px -10px rgb(55 216 219 / 0.55);
+
+  /* animate-shine: one light sweep across a button */
+  --animate-shine: shine 0.9s var(--ease-brand);
+
+  @keyframes shine {
+    from {
+      transform: skewX(-20deg) translateX(0);
+    }
+    to {
+      transform: skewX(-20deg) translateX(350%);
+    }
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* ============================================================
+   TYPOGRAPHY
+   ============================================================ */
+@theme inline {
+  --font-display: var(--font-satoshi), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+/* ============================================================
+   BASE STYLES
+   ============================================================ */
+@layer base {
+  
+  html {
+    color-scheme: light;
+    scroll-padding-top: 5rem;
+  }
+
+  body {
+    background-color: var(--color-white);
+    color: var(--color-mortar);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+    color: var(--color-navy);
+    text-wrap: balance;
+  }
+
+  /* Visible focus ring for keyboard users only (not on mouse click) */
+  :focus-visible {
+    outline: 2px solid var(--color-blue);
+    outline-offset: 3px;
+  }
+
+
+  /* Smooth scrolling for in-page links, unless the user prefers reduced motion */
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+
+  /* Respect reduced-motion for all CSS transitions and animations */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
 }
