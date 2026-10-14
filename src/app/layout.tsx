@@ -3,6 +3,7 @@ import { satoshi } from "@/lib/fonts";
 import { MotionProvider } from "@/components/animations/MotionProvider";
 import { Navbar } from "@/components/layout/Navbar";
 import "./globals.css";
+import { Footer } from "@/components/layout/Footer";
 
 export const metadata: Metadata = {
   title: "Billpay",
@@ -25,6 +26,7 @@ export default function RootLayout({
           </a>
           <Navbar />
           {children}
+          <Footer />
         </MotionProvider>
       </body>
     </html>
