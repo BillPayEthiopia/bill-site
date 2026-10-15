@@ -46,8 +46,7 @@ export function ValueProposition() {
 
           <ul className="grid gap-5 sm:grid-cols-2">
             {features.map(({ title, description, icon: Icon }, index) => (
-              <Reveal key={title} delay={index * 0.1}>
-                <li className="h-full">
+              <Reveal as="li" key={title} delay={index * 0.1}>
                   <SpotlightCard className="h-full rounded-card border border-line bg-white p-7 shadow-card transition-[translate,box-shadow] duration-500 ease-brand hover:-translate-y-1.5 hover:shadow-float">
                     {/* Blue-to-aqua line that draws across the top on hover */}
                     <span
@@ -67,7 +66,6 @@ export function ValueProposition() {
                     <h3 className="mt-7 font-display text-xl font-bold">{title}</h3>
                     <p className="mt-2.5 text-sm leading-relaxed">{description}</p>
                   </SpotlightCard>
-                </li>
               </Reveal>
             ))}
           </ul>
