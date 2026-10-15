@@ -21,7 +21,7 @@ export const securityContent = {
   panel: {
     title: ["Built for Ethiopia.", "Ready for what's next."],
     /** Path under /public. Leave undefined until the photo exists. */
-    image: undefined as string | undefined,
+    image: "/security/ethiopia.jpg" as string | undefined,
     alt: "The Addis Ababa skyline in daylight",
   },
 };
