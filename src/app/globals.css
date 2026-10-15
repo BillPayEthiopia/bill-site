@@ -89,6 +89,14 @@
     from { transform: translateX(0); }
     to { transform: translateX(-60px); }
   }
+  
+    /* animate-marquee: endless horizontal scroll. Content must be duplicated once. */
+  --animate-marquee: marquee 40s linear infinite;
+
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
 }
 
 /* ============================================================
