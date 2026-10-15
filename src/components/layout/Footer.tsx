@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowUp } from "lucide-react";
+import { ArrowUp, MapPin } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { Logo } from "@/components/ui/Logo";
 import { footerContent } from "@/content/footer";
@@ -7,32 +7,66 @@ import { navGroups } from "@/content/navigation";
 
 /** Underline that grows from the left on hover. */
 const linkClass =
-  "bg-linear-to-r from-blue to-blue bg-[length:0%_1px] bg-left-bottom bg-no-repeat pb-0.5 " +
-  "transition-[background-size,color] duration-300 ease-brand " +
-  "hover:bg-[length:100%_1px] hover:text-navy";
+  "bg-linear-to-r from-aqua to-aqua bg-[length:0%_1px] bg-left-bottom bg-no-repeat pb-0.5 " +
+  "transition-[background-size,color] duration-300 ease-brand hover:bg-[length:100%_1px] hover:text-white";
 
 export async function Footer() {
   "use cache";
   const year = new Date().getFullYear();
 
   return (
-    <footer className="relative bg-white">
-      {/* Brand-colored hairline along the top edge */}
-      <div aria-hidden="true" className="h-px bg-linear-to-r from-navy via-blue to-aqua" />
+    <footer className="relative isolate overflow-hidden bg-navy-950 text-white/60">
+      {/* Decorative layers */}
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10">
+        <div className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-aqua to-transparent" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle,rgb(255_255_255/0.06)_1px,transparent_1px)] bg-[size:22px_22px] [mask-image:radial-gradient(ellipse_50%_60%_at_100%_100%,black,transparent)]" />
+        <div className="absolute -bottom-48 -right-32 size-[34rem] rounded-full bg-blue/20 blur-3xl" />
+        <svg
+          className="absolute -bottom-16 right-0 h-72 w-[60%] animate-drift"
+          viewBox="0 0 800 300"
+          preserveAspectRatio="none"
+          fill="none"
+        >
+          <path d="M0 200 C 150 120, 300 280, 450 200 S 700 90, 800 150" className="stroke-blue/15" strokeWidth="44" strokeLinecap="round" />
+          <path d="M0 260 C 150 180, 300 340, 450 260 S 700 150, 800 210" className="stroke-aqua/10" strokeWidth="44" strokeLinecap="round" />
+        </svg>
+      </div>
 
-      <Container className="grid gap-12 py-16 lg:grid-cols-[1fr_2fr] lg:gap-16 lg:py-20">
-        <div className="max-w-xs space-y-5">
+      <Container className="grid gap-14 py-20 lg:grid-cols-[1.3fr_2fr] lg:gap-20 lg:py-24">
+        {/* Brand column */}
+        <div className="max-w-sm">
           <Link href="/" aria-label="Billpay home" className="inline-block rounded-md">
-            <Logo className="w-32" />
+            <Logo variant="reversed" className="w-36" />
           </Link>
-          <p className="leading-relaxed">{footerContent.description}</p>
+          <p className="mt-5 font-display text-lg font-semibold text-white">{footerContent.tagline}</p>
+          <p className="mt-3 leading-relaxed">{footerContent.description}</p>
+
+          <p className="mt-6 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3.5 py-1.5 text-xs">
+            <MapPin className="size-3.5 text-aqua" aria-hidden="true" />
+            {footerContent.location}
+          </p>
 
           {footerContent.social.length > 0 && (
-            <ul className="flex flex-wrap gap-x-5 gap-y-2 text-sm">
-              {footerContent.social.map((link) => (
-                <li key={link.label}>
-                  <a href={link.href} target="_blank" rel="noopener noreferrer" className={linkClass}>
-                    {link.label}
+            <ul className="mt-8 flex flex-wrap gap-2.5">
+              {footerContent.social.map(({ label, href, icon }) => (
+                <li key={label}>
+                  <a
+                    href={href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={label}
+                    className="flex size-10 items-center justify-center rounded-full border border-white/15 text-white/70 transition-[background-color,border-color,color,translate] duration-300 ease-brand hover:-translate-y-0.5 hover:border-aqua hover:bg-aqua hover:text-navy focus-visible:outline-aqua"
+                  >
+                    <span
+                      aria-hidden="true"
+                      className="size-4 bg-current"
+                      style={{
+                        maskImage: `url(${icon})`,
+                        maskSize: "contain",
+                        maskRepeat: "no-repeat",
+                        maskPosition: "center",
+                      }}
+                    />
                   </a>
                 </li>
               ))}
@@ -40,13 +74,14 @@ export async function Footer() {
           )}
         </div>
 
+        {/* Link columns */}
         <nav aria-label="Footer" className="grid grid-cols-2 gap-x-8 gap-y-10 sm:grid-cols-4">
           {navGroups.map((group) => (
             <div key={group.label}>
-              <h2 className="font-display text-sm font-semibold uppercase tracking-wider">
+              <h2 className="font-display text-xs font-semibold uppercase tracking-[0.12em] text-aqua">
                 {group.label}
               </h2>
-              <ul className="mt-4 space-y-3">
+              <ul className="mt-5 space-y-3 text-sm">
                 {group.items.map((item) => (
                   <li key={item.label}>
                     <Link href={item.href} className={linkClass}>
@@ -60,7 +95,8 @@ export async function Footer() {
         </nav>
       </Container>
 
-      <div className="border-t border-line">
+      {/* Bottom bar */}
+      <div className="border-t border-white/10">
         <Container className="flex flex-col-reverse gap-5 py-6 text-sm sm:flex-row sm:items-center sm:justify-between">
           <p>© {year} Billpay. All rights reserved.</p>
 
@@ -71,9 +107,9 @@ export async function Footer() {
               </Link>
             ))}
 
-            <a href="#main" className="group inline-flex items-center gap-2 font-display font-medium text-navy">
+            <a href="#main" className="group inline-flex items-center gap-2 font-display font-medium text-white">
               Back to top
-              <span className="flex size-8 items-center justify-center rounded-full border border-line transition-colors duration-300 ease-brand group-hover:border-navy group-hover:bg-navy group-hover:text-white">
+              <span className="flex size-8 items-center justify-center rounded-full border border-white/20 transition-colors duration-300 ease-brand group-hover:border-aqua group-hover:bg-aqua group-hover:text-navy">
                 <ArrowUp
                   className="size-4 transition-transform duration-300 ease-brand group-hover:-translate-y-0.5"
                   aria-hidden="true"
