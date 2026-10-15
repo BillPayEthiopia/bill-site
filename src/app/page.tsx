@@ -1,10 +1,10 @@
 import { Container } from "@/components/ui/Container";
 import { Hero } from "@/components/landing/hero/Hero";
 import { ValueProposition } from "@/components/landing/ValueProposition";
+import { Products } from "@/components/landing/products/Products";
 
 // Placeholder sections. Each will be replaced by its real component.
 const sections = [
-  { id: "products", label: "Products" },
   { id: "solutions", label: "Solutions" },
   { id: "developers", label: "Developers" },
   { id: "security", label: "Security" },
@@ -17,6 +17,7 @@ export default function Home() {
     <main id="main">
       <Hero />
       <ValueProposition />
+      <Products />
 
       {sections.map((section, index) => (
         <section key={section.id} id={section.id} className={index % 2 === 0 ? "bg-white" : "bg-surface"}>
