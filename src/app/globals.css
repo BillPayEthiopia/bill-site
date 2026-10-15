@@ -91,7 +91,7 @@
   }
   
     /* animate-marquee: endless horizontal scroll. Content must be duplicated once. */
-  --animate-marquee: marquee 40s linear infinite;
+  --animate-marquee: marquee 55s linear infinite;
 
   @keyframes marquee {
     from { transform: translateX(0); }
