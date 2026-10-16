@@ -6,10 +6,14 @@ import "./globals.css";
 import { Footer } from "@/components/layout/Footer";
 
 export const metadata: Metadata = {
-  title: "Billpay",
+  title: {
+    default: "Billpay — Payments for a stronger tomorrow",
+    template: "%s · Billpay",
+  },
   description:
-    "Billpay is a payment gateway that helps businesses accept and manage digital payments.",
+    "Billpay is a payment gateway that helps businesses in Ethiopia accept and manage digital payments.",
 };
+
 
 export default function RootLayout({
   children,
