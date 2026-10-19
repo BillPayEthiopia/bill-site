@@ -7,8 +7,10 @@ export const heroContent = {
   headline: [
     { text: "Powering your" },
     { text: "business with" },
-    { text: "seamless payments.", highlight: true },
-  ],
+    { text: "seamless", highlight: true },
+    { text: "payments.", highlight: true, underline: true },
+  ] as { text: string; highlight?: boolean; underline?: boolean }[],
+  
   description:
     "Billpay is a payment gateway that helps businesses accept payments, manage transactions, and grow — all in one place.",
   primaryCta: { label: "Get started", href: "#get-started" },

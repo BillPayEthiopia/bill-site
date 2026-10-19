@@ -22,16 +22,17 @@ export function HeroCopy() {
         {eyebrow}
       </p>
 
+
       {/* Each line slides up from behind its own mask */}
-      <h1 id="hero-title" className="mt-6 text-display font-bold">
+      <h1 id="hero-title" className="mt-6 text-display font-bold short:mt-5">
         {headline.map((line, index) => (
           <span
             key={line.text}
-            className={cn("block overflow-hidden", line.highlight ? "pb-[0.22em]" : "pb-[0.06em]")}
+            className={cn("block overflow-hidden", line.underline ? "pb-[0.22em]" : "pb-[0.06em]")}
           >
             <span className={cn("block animate-rise", line.highlight && "text-blue")} style={delay(120 + index * 110)}>
-              {line.highlight ? (
-                <span className="relative inline-block">
+              {line.underline ? (
+                <span className="relative inline-block whitespace-nowrap">
                   {line.text}
                   {/* Aqua wave underline that draws itself */}
                   <svg
@@ -48,7 +49,7 @@ export function HeroCopy() {
                       className="animate-draw stroke-aqua"
                       strokeWidth="4"
                       strokeLinecap="round"
-                      style={delay(620)}
+                      style={delay(730)}
                     />
                   </svg>
                 </span>

@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+
+/* short: desktop screens with little height, e.g. a 1366×768 laptop */
+@custom-variant short (@media (min-width: 1024px) and (max-height: 820px));
+
 /* ============================================================
    BRAND COLORS
    =========================================================== */
@@ -30,8 +34,9 @@
   /* max-w-page: content width for every section (1216px) */
   --container-page: 76rem;
 
-  /* text-display: hero headline. Scales smoothly with screen width. */
-  --text-display: clamp(2.75rem, 1.6rem + 4.2vw, 5rem);
+  /* text-display: hero headline. Scales with screen width AND height,
+     so the hero fits on short laptop screens. */
+  --text-display: clamp(2.75rem, min(1.6rem + 4.2vw, 1rem + 6.5vh), 5rem);
   --text-display--line-height: 1.04;
   --text-display--letter-spacing: -0.025em;
 
