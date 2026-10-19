@@ -7,7 +7,7 @@ import { Footer } from "@/components/layout/Footer";
 
 export const metadata: Metadata = {
   title: {
-    default: "Billpay — Payments for a stronger tomorrow",
+    default: "Billpay",
     template: "%s · Billpay",
   },
   description:
