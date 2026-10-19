@@ -9,7 +9,7 @@ export function HeroCopy() {
   const { eyebrow, headline, description, primaryCta, secondaryCta, paymentMethods } = heroContent;
 
   return (
-    <div className="max-w-xl">
+    <div className="@container w-full max-w-[38rem]">
       {/* Eyebrow with a softly pulsing "live" dot */}
       <p
         className="inline-flex animate-fade-up items-center gap-2 rounded-full border border-blue/15 bg-white/70 px-3.5 py-1.5 font-display text-xs font-semibold uppercase tracking-[0.12em] text-blue shadow-sm backdrop-blur"
@@ -24,7 +24,7 @@ export function HeroCopy() {
 
 
       {/* Each line slides up from behind its own mask */}
-      <h1 id="hero-title" className="mt-6 text-display font-bold short:mt-5">
+        <h1 id="hero-title" className="mt-6 text-hero font-bold short:mt-5">
         {headline.map((line, index) => (
           <span
             key={line.text}

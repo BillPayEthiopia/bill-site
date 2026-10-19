@@ -25,20 +25,31 @@
   --color-aqua-50: #ecfbfb;
   --color-surface: #f7f9fc;
   --color-line: #e3e8f0;
+
+    /* Status color for "completed" indicators in product mockups. Not a brand color. */
+  --color-success: #22a06b;
 }
 
 /* ============================================================
    LAYOUT, TYPE SCALE, SHAPE, DEPTH, MOTION
    ============================================================ */
 @theme {
-  /* max-w-page: content width for every section (1216px) */
-  --container-page: 76rem;
+    /* max-w-page: content width. max-w-page-wide applies on 1536px+ screens. */
+  --container-page: 80rem;
+  --container-page-wide: 90rem;
 
   /* text-display: hero headline. Scales with screen width AND height,
      so the hero fits on short laptop screens. */
   --text-display: clamp(2.75rem, min(1.6rem + 4.2vw, 1rem + 6.5vh), 5rem);
   --text-display--line-height: 1.04;
   --text-display--letter-spacing: -0.025em;
+
+  /* text-hero: hero headline. Sized by its own column's width (cqi) and the
+    screen height, so it fits its column and never pushes the CTAs off a laptop.
+    Needs an @container ancestor. */
+  --text-hero: clamp(2.75rem, min(12.5cqi, 1rem + 6.5vh), 5rem);
+  --text-hero--line-height: 1.04;
+  --text-hero--letter-spacing: -0.025em;
 
   /* text-heading: section headings */
   --text-heading: clamp(2rem, 1.4rem + 2.2vw, 3.25rem);

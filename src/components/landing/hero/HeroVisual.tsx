@@ -1,105 +1,192 @@
 "use client";
 
-import { useEffect, useRef, useState, type PointerEvent, type ReactNode } from "react";
 import {
-  motion,
-  useInView,
-  useMotionValue,
-  useReducedMotion,
-  useSpring,
-  useTransform,
-} from "motion/react";
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+  type PointerEvent,
+  type ReactNode,
+} from "react";
+import { motion, useInView, useMotionValue, useReducedMotion, useSpring, useTransform } from "motion/react";
 import { Float } from "@/components/animations/Float";
 import {
   heroDemo,
   METHOD_LABELS,
   type CheckoutStage,
   type DemoTransaction,
+  type PosStage,
 } from "@/content/hero";
 import { EASE_BRAND } from "@/lib/motion";
-import { cn } from "@/lib/utils";
+import { DashboardScreen } from "./devices/DashboardScreen";
+import { Laptop } from "./devices/Laptop";
+import { PosTerminal } from "./devices/PosTerminal";
+import { Smartphone } from "./devices/Smartphone";
+import { Tablet } from "./devices/Tablet";
+import { TabletScreen } from "./devices/TabletScreen";
 import { PhoneCheckout } from "./PhoneCheckout";
-import { TransactionsCard } from "./TransactionsCard";
-import { VolumeCard } from "./VolumeCard";
 
-/** How long each checkout screen stays visible, in milliseconds. */
-const STAGE_MS: Record<CheckoutStage, number> = {
-  select: 2800,
-  processing: 1400,
-  success: 3200,
+/** Phone checkout timing, in ms. One full payment takes 7.4s. */
+const STAGE_MS: Record<CheckoutStage, number> = { select: 2800, processing: 1400, success: 3200 };
+/** POS runs on the same 7.4s rhythm, offset so its payments land between the phone's. */
+const POS_MS = { firstReady: 7900, ready: 3300, approved: 4100 };
+
+type DeviceId = "laptop" | "tablet" | "pos" | "phone";
+type Placement = { x: number; y: number; scale?: number };
+type Composition = { width: number; height: number; place: Partial<Record<DeviceId, Placement>> };
+
+/*
+ * Design canvases. Devices are drawn at real size and positioned in px,
+ * then the whole canvas is scaled to fit the column.
+ */
+const FULL: Composition = {
+  width: 760,
+  height: 610,
+  place: {
+    laptop: { x: 160, y: 20 },
+    tablet: { x: 440, y: 370 },
+    pos: { x: 292, y: 360 },
+    phone: { x: 40, y: 118 },
+  },
 };
 
-/** One mockup element: rises in on load, floats, and sits at a 3D depth. */
-function Layer({
-  className,
-  depth,
-  delay,
-  floatDelay,
-  children,
-}: {
-  className: string;
+/** Phones: no tablet, a smaller laptop behind, so the phone stays readable. */
+const COMPACT: Composition = {
+  width: 420,
+  height: 540,
+  place: {
+    laptop: { x: 60, y: 0, scale: 0.6 },
+    pos: { x: 262, y: 300, scale: 0.85 },
+    phone: { x: 16, y: 100, scale: 0.9 },
+  },
+};
+
+/** Picks the composition for this screen and scales it to the stage's width. */
+function useComposition() {
+  const ref = useRef<HTMLDivElement>(null);
+  const [layout, setLayout] = useState({ comp: FULL, scale: 1 });
+
+  // Layout effect: measured before the first paint, so devices never jump into place.
+  useLayoutEffect(() => {
+    const element = ref.current;
+    if (!element) return;
+    const wide = window.matchMedia("(min-width: 640px)");
+
+    const update = () => {
+      const comp = wide.matches ? FULL : COMPACT;
+      setLayout({ comp, scale: element.clientWidth / comp.width });
+    };
+
+    update();
+    const observer = new ResizeObserver(update);
+    observer.observe(element);
+    wide.addEventListener("change", update);
+    return () => {
+      observer.disconnect();
+      wide.removeEventListener("change", update);
+    };
+  }, []);
+
+  return [ref, layout] as const;
+}
+
+type DeviceProps = {
+  place?: Placement;
   depth: number;
   delay: number;
-  floatDelay: number;
+  float?: { distance: number; duration: number; delay: number };
   children: ReactNode;
-}) {
+};
+
+/** Positions one device, rises it in on load, and optionally floats it. */
+function Device({ place, depth, delay, float, children }: DeviceProps) {
+  if (!place) return null;
   return (
     <motion.div
-      className={cn("absolute", className)}
-      style={{ z: depth }}
-      initial={{ opacity: 0, y: 40 }}
+      className="absolute origin-top-left"
+      style={{ left: place.x, top: place.y, z: depth, scale: place.scale ?? 1 }}
+      initial={{ opacity: 0, y: 36 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 1, delay, ease: EASE_BRAND }}
     >
-      <Float delay={floatDelay}>{children}</Float>
+      {float ? <Float {...float}>{children}</Float> : children}
     </motion.div>
   );
 }
 
 export function HeroVisual() {
-  const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { amount: 0.3 });
+  const [stageRef, { comp, scale }] = useComposition();
+  const inView = useInView(stageRef, { amount: 0.3 });
   const reduceMotion = useReducedMotion();
+  const live = !reduceMotion && inView;
 
-  // ---- The payment story: select → processing → success → next order ----
-  const [stage, setStage] = useState<CheckoutStage>("select");
-  const [cycle, setCycle] = useState(0);
+  // ---- Shared ledger: every payment lands in the dashboard and tablet ----
   const [transactions, setTransactions] = useState<DemoTransaction[]>(heroDemo.initialTransactions);
   const [total, setTotal] = useState(heroDemo.baseVolume);
+  const [count, setCount] = useState(heroDemo.baseCount);
   const nextId = useRef(heroDemo.initialTransactions.length);
 
+  const record = useCallback((amount: number, method: string) => {
+    const id = nextId.current++;
+    setTransactions((previous) => [{ id, kind: "received" as const, amount, method }, ...previous].slice(0, 4));
+    setTotal((current) => current + amount);
+    setCount((current) => current + 1);
+  }, []);
+
+  // ---- Phone: select → processing → success → next order ----
+  const [stage, setStage] = useState<CheckoutStage>("select");
+  const [cycle, setCycle] = useState(0);
   const order = heroDemo.orders[cycle % heroDemo.orders.length];
 
   useEffect(() => {
-    // Pause when off-screen or when the visitor prefers reduced motion.
-    if (reduceMotion || !inView) return;
-
+    if (!live) return;
     const timer = window.setTimeout(() => {
       if (stage === "select") {
         setStage("processing");
       } else if (stage === "processing") {
         setStage("success");
-        // The payment lands in the dashboard at the moment it succeeds.
-        const id = nextId.current++;
-        setTransactions((previous) =>
-          [{ id, kind: "received" as const, amount: order.amount, method: METHOD_LABELS[order.method] }, ...previous].slice(0, 3),
-        );
-        setTotal((current) => current + order.amount);
+        record(order.amount, METHOD_LABELS[order.method]);
       } else {
         setStage("select");
         setCycle((current) => current + 1);
       }
     }, STAGE_MS[stage]);
-
     return () => window.clearTimeout(timer);
-  }, [stage, order, reduceMotion, inView]);
+  }, [live, stage, order, record]);
 
-  // ---- 3D tilt toward the mouse ----
+  // ---- POS: tap to pay → approved, offset from the phone ----
+  const [posStage, setPosStage] = useState<PosStage>("ready");
+  const [posCycle, setPosCycle] = useState(0);
+  const posAmount = heroDemo.posOrders[posCycle % heroDemo.posOrders.length];
+
+  useEffect(() => {
+    if (!live) return;
+    const wait =
+      posStage === "approved" ? POS_MS.approved : posCycle === 0 ? POS_MS.firstReady : POS_MS.ready;
+    const timer = window.setTimeout(() => {
+      if (posStage === "ready") {
+        setPosStage("approved");
+        record(posAmount, "POS · Card");
+      } else {
+        setPosStage("ready");
+        setPosCycle((current) => current + 1);
+      }
+    }, wait);
+    return () => window.clearTimeout(timer);
+  }, [live, posStage, posCycle, posAmount, record]);
+
+  // Reduced motion: show the finished, successful states, standing still.
+  const phoneShown: CheckoutStage = reduceMotion ? "success" : stage;
+  const posShown: PosStage = reduceMotion ? "approved" : posStage;
+  const today = heroDemo.todayBase + (total - heroDemo.baseVolume);
+
+  // ---- Gentle 3D tilt toward the mouse ----
   const pointerX = useMotionValue(0);
   const pointerY = useMotionValue(0);
   const spring = { stiffness: 150, damping: 20, mass: 0.5 };
-  const rotateY = useSpring(useTransform(pointerX, [-0.5, 0.5], [-7, 7]), spring);
-  const rotateX = useSpring(useTransform(pointerY, [-0.5, 0.5], [6, -6]), spring);
+  const rotateY = useSpring(useTransform(pointerX, [-0.5, 0.5], [-6, 6]), spring);
+  const rotateX = useSpring(useTransform(pointerY, [-0.5, 0.5], [5, -5]), spring);
 
   function handlePointerMove(event: PointerEvent<HTMLDivElement>) {
     if (reduceMotion || event.pointerType !== "mouse") return;
@@ -115,34 +202,44 @@ export function HeroVisual() {
 
   return (
     // Decorative: hidden from screen readers so sample data is never read as real.
-    <div ref={ref} aria-hidden="true" className="relative flex justify-center lg:justify-end">
-      <div
-        onPointerMove={handlePointerMove}
-        onPointerLeave={resetTilt}
-        className="relative h-[31rem] w-[34rem] shrink-0 [perspective:1400px] [zoom:0.58] min-[420px]:[zoom:0.7] sm:[zoom:1] lg:[zoom:0.85] xl:[zoom:1]"
-      >
-        {/* Glows behind the mockups */}
-        <div className="absolute left-1/2 top-1/2 size-[26rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-aqua/30 blur-3xl" />
-        <div className="absolute right-0 top-0 size-64 rounded-full bg-blue/15 blur-3xl" />
+    <div
+      ref={stageRef}
+      aria-hidden="true"
+      onPointerMove={handlePointerMove}
+      onPointerLeave={resetTilt}
+      className="relative mx-auto aspect-[420/540] w-full max-w-[26rem] sm:aspect-[760/610] sm:max-w-[44rem] lg:max-w-none"
+    >
+      {/* Glows behind the devices */}
+      <div className="pointer-events-none absolute inset-[12%] rounded-full bg-aqua/25 blur-3xl" />
+      <div className="pointer-events-none absolute right-0 top-0 size-1/3 rounded-full bg-blue/15 blur-3xl" />
 
-        <motion.div
-          style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
-          className="relative size-full"
-        >
-          <Layer className="right-0 top-0" depth={0} delay={0.35} floatDelay={0}>
-            <TransactionsCard items={transactions} />
-          </Layer>
-          <Layer className="right-4 top-[17rem]" depth={40} delay={0.55} floatDelay={1.2}>
-            <VolumeCard total={total} />
-          </Layer>
-          <Layer className="left-2 top-12" depth={80} delay={0.2} floatDelay={0.6}>
-            <PhoneCheckout
-              stage={stage}
-              amount={order.amount}
-              method={order.method}
-              orderId={order.orderId}
-            />
-          </Layer>
+      {/* The design canvas, scaled to fit */}
+      <div
+        className="absolute left-0 top-0 origin-top-left [perspective:1600px]"
+        style={{ width: comp.width, height: comp.height, transform: `scale(${scale})` }}
+      >
+        <motion.div style={{ rotateX, rotateY, transformStyle: "preserve-3d" }} className="relative size-full">
+          <Device place={comp.place.laptop} depth={0} delay={0.15}>
+            <Laptop>
+              <DashboardScreen total={total} count={count} transactions={transactions} />
+            </Laptop>
+          </Device>
+
+          <Device place={comp.place.tablet} depth={20} delay={0.55} float={{ distance: 6, duration: 7, delay: 1.2 }}>
+            <Tablet>
+              <TabletScreen today={today} />
+            </Tablet>
+          </Device>
+
+          <Device place={comp.place.pos} depth={30} delay={0.75} float={{ distance: 6, duration: 5.5, delay: 2 }}>
+            <PosTerminal stage={posShown} amount={posAmount} />
+          </Device>
+
+          <Device place={comp.place.phone} depth={40} delay={0.35} float={{ distance: 10, duration: 6, delay: 0 }}>
+            <Smartphone>
+              <PhoneCheckout stage={phoneShown} order={order} />
+            </Smartphone>
+          </Device>
         </motion.div>
       </div>
     </div>
