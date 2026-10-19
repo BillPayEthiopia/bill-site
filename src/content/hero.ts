@@ -11,7 +11,7 @@ export const heroContent = {
     { text: "payments.", highlight: true, underline: true },
   ] as { text: string; highlight?: boolean; underline?: boolean }[],
   description:
-    "Billpay is a payment gateway that helps businesses accept payments, manage transactions, and grow — all in one place.",
+    "Billpay is a payment gateway that helps businesses accept payments, manage transactions, and grow.  all in one place.",
   primaryCta: { label: "Get started", href: "#get-started" },
   secondaryCta: { label: "Explore products", href: "#products" },
 
