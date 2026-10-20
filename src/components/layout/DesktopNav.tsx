@@ -66,6 +66,8 @@ export function DesktopNav({ openMenu, onOpenMenuChange }: DesktopNavProps) {
           const isOpen = openMenu === group.label;
           const panelId = `nav-panel-${group.label.toLowerCase()}`;
           const showHighlight = (hovered ?? openMenu) === group.label;
+          // Long menus (Products has 8 items) open as a wider two-column panel.
+          const wide = group.items.length > 6;
 
           return (
             <li
@@ -116,10 +118,13 @@ export function DesktopNav({ openMenu, onOpenMenuChange }: DesktopNavProps) {
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: 6, scale: 0.98 }}
                     transition={{ duration: DURATION.fast, ease: EASE_BRAND }}
-                    className="absolute left-1/2 top-full z-50 w-[22rem] -translate-x-1/2 origin-top pt-3"
+                    className={cn(
+                      "absolute top-full z-50 pt-3",
+                      wide ? "left-0 w-[40rem] origin-top-left" : "left-1/2 w-[22rem] -translate-x-1/2 origin-top",
+                    )}
                   >
                     <div className="rounded-card border border-line bg-white p-2 shadow-float">
-                      <ul>
+                      <ul className={cn(wide && "grid grid-cols-2 gap-x-1")}>
                         {group.items.map((item) => {
                           const Icon = item.icon;
                           return (
@@ -127,7 +132,7 @@ export function DesktopNav({ openMenu, onOpenMenuChange }: DesktopNavProps) {
                               <Link
                                 href={item.href}
                                 onClick={() => onOpenMenuChange(null)}
-                                className="group/item flex items-start gap-3 rounded-xl p-3 transition-colors duration-200 hover:bg-surface"
+                                className="group/item flex h-full items-start gap-3 rounded-xl p-3 transition-colors duration-200 hover:bg-surface"
                               >
                                 {Icon && (
                                   <span className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-aqua-50 text-blue transition-colors duration-200 group-hover/item:bg-navy group-hover/item:text-aqua">

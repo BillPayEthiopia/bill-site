@@ -16,7 +16,7 @@ function SolutionCard({ title, description, href, icon: Icon, image, alt }: Solu
             src={image}
             alt={alt}
             fill
-            sizes="(min-width: 1280px) 25vw, (min-width: 640px) 50vw, 85vw"
+                        sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 85vw"
             className="object-cover transition-transform duration-700 ease-brand group-hover:scale-105"
           />
         ) : (
@@ -83,13 +83,13 @@ export function Solutions() {
           </Reveal>
         </div>
 
-        {/* Swipeable row on phones, grid from sm up */}
-        <ul className="-mx-5 mt-14 flex snap-x snap-mandatory gap-5 overflow-x-auto px-5 pb-4 [scrollbar-width:none] sm:mx-0 sm:grid sm:grid-cols-2 sm:overflow-visible sm:px-0 sm:pb-0 xl:grid-cols-4">
+        {/* Swipeable row on phones; 2 columns on tablets; 3 on desktop (two even rows) */}
+        <ul className="-mx-[clamp(1.25rem,4vw,4rem)] mt-14 flex snap-x snap-mandatory scroll-px-[clamp(1.25rem,4vw,4rem)] gap-5 overflow-x-auto px-[clamp(1.25rem,4vw,4rem)] pb-4 [scrollbar-width:none] sm:mx-0 sm:grid sm:grid-cols-2 sm:overflow-visible sm:px-0 sm:pb-0 lg:grid-cols-3">
           {items.map((solution, index) => (
             <Reveal
               as="li"
               key={solution.title}
-              delay={index * 0.1}
+              delay={(index % 3) * 0.1}
               className="w-[85%] shrink-0 snap-start sm:w-auto"
             >
               <SolutionCard {...solution} />
