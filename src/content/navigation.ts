@@ -21,6 +21,8 @@ import {
   Terminal,
   Wallet,
 } from "lucide-react";
+/** Merchant sign-up. Every "Get started" button on the site points here. */
+export const SIGN_UP_URL = "https://merchant.billpay.et/sign-up";
 
 export type NavItem = {
   label: string;
@@ -87,5 +89,5 @@ export const navGroups: NavGroup[] = [
 export const navActions = {
   /** Set to the dashboard URL when it exists. The link stays hidden while this is null. */
   signIn: null as string | null,
-  getStarted: "#get-started",
+  getStarted: SIGN_UP_URL,
 };

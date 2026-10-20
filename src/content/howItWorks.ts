@@ -1,4 +1,5 @@
 import type { LucideIcon } from "lucide-react";
+import { SIGN_UP_URL } from "./navigation";
 import { Code2, Rocket, SlidersHorizontal } from "lucide-react";
 
 export type Step = {
@@ -12,7 +13,7 @@ export const howItWorksContent = {
   title: ["Get started in", "three simple steps."],
   description:
     "Integrate, customize, and start accepting payments. Most teams go live within days, not months.",
-  primaryCta: { label: "Get started", href: "#get-started" },
+  primaryCta: { label: "Get started", href: SIGN_UP_URL },
   secondaryCta: { label: "Read the docs", href: "#developers" },
 
   steps: [
