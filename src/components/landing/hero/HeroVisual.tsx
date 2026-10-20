@@ -45,9 +45,9 @@ const FULL: Composition = {
   height: 585,
   place: {
     laptop: { x: 150, y: 10 },
-    // Tablet and POS overlap the lower half of the laptop screen
-    tablet: { x: 492, y: 250 },
-    pos: { x: 298, y: 222 },
+    // Tablet and POS rise over the lower part of the laptop screen
+    tablet: { x: 492, y: 168 },
+    pos: { x: 298, y: 168 },
     phone: { x: 20, y: 100 },
   },
 };
