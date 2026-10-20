@@ -131,6 +131,14 @@
   html {
     color-scheme: light;
     scroll-padding-top: 5rem;
+
+    /*
+     * Fluid scale for large screens. Every rem-based size on the site (type,
+     * spacing, components, container width) grows in proportion above 1440px:
+     * 16px at 1440, about 20px at 2560, capped at 22px on 4K screens.
+     * rem-based, so a visitor's own browser text size is still respected.
+     */
+    font-size: clamp(1rem, 0.679rem + 0.357vw, 1.375rem);
   }
 
   body {

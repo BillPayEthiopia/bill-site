@@ -89,7 +89,7 @@ function LinksIllustration({ active }: IllustrationProps) {
               step >= 1 ? "bg-aqua text-navy" : "bg-navy-50 text-blue",
             )}
           >
-            {step >= 1 ? <Check className="size-3" /> : <Copy className="size-3" />}
+          {step >= 1 ? <Check className="size-3" /> : <Copy className="size-3" />}
           </span>
         </div>
 
