@@ -2,8 +2,9 @@
 
 import { useEffect, useRef, useState, type ComponentProps } from "react";
 import { AnimatePresence, motion, useInView, useReducedMotion } from "motion/react";
-import { ArrowDownLeft, Check, Copy, Landmark, Link2 } from "lucide-react";
+import { ArrowDownLeft, Check, Copy, Fingerprint, Landmark, Link2 } from "lucide-react";
 import type { ProductKind } from "@/content/products";
+import { PosTerminal } from "@/components/landing/hero/devices/PosTerminal";
 import { EASE_BRAND } from "@/lib/motion";
 import { cn, formatETB } from "@/lib/utils";
 
@@ -183,11 +184,268 @@ function SettlementsIllustration() {
   );
 }
 
+
+/* ---------- QR ---------- */
+
+const FINDERS: [number, number][] = [
+  [0, 0],
+  [14, 0],
+  [0, 14],
+];
+
+/** A fixed, made-up QR-style pattern: three corner squares plus random modules. Not scannable. */
+const QR_CELLS = (() => {
+  const cells: [number, number][] = [];
+  const nearFinder = (x: number, y: number) =>
+    [[0, 0], [13, 0], [0, 13]].some(([fx, fy]) => x >= fx && x < fx + 8 && y >= fy && y < fy + 8);
+  let seed = 7;
+  for (let y = 0; y < 21; y++) {
+    for (let x = 0; x < 21; x++) {
+      if (nearFinder(x, y)) continue;
+      seed = (seed * 9301 + 49297) % 233280;
+      if (seed / 233280 > 0.52) cells.push([x, y]);
+    }
+  }
+  return cells;
+})();
+
+function QrIllustration() {
+  const { ref, step } = useLoop(3, 1400);
+  const reduceMotion = useReducedMotion();
+  const paid = step === 2;
+
+  return (
+    <Frame ref={ref}>
+      <div className="flex w-48 items-center gap-3 rounded-xl bg-white p-3 shadow-float">
+        <div className="relative size-16 shrink-0 overflow-hidden rounded-md">
+          <svg
+            viewBox="0 0 21 21"
+            shapeRendering="crispEdges"
+            className={cn("size-full transition-opacity duration-300", paid && "opacity-20")}
+          >
+            {QR_CELLS.map(([x, y]) => (
+              <rect key={`${x}-${y}`} x={x} y={y} width={1} height={1} className="fill-navy" />
+            ))}
+            {FINDERS.map(([x, y]) => (
+              <g key={`${x}-${y}`}>
+                <rect x={x} y={y} width={7} height={7} className="fill-navy" />
+                <rect x={x + 1} y={y + 1} width={5} height={5} className="fill-white" />
+                <rect x={x + 2} y={y + 2} width={3} height={3} className="fill-navy" />
+              </g>
+            ))}
+          </svg>
+
+          {/* Scan line */}
+          {step === 0 && !reduceMotion && (
+            <motion.span
+              className="absolute inset-x-0 h-0.5 bg-aqua shadow-[0_0_8px_2px_rgb(55_216_219/0.6)]"
+              initial={{ top: "0%" }}
+              animate={{ top: "100%" }}
+              transition={{ duration: 0.7, ease: "easeInOut", repeat: Infinity, repeatType: "reverse" }}
+            />
+          )}
+
+          <AnimatePresence>
+            {paid && (
+              <motion.span
+                key="check"
+                initial={{ scale: 0.6, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.35, ease: EASE_BRAND }}
+                className="absolute inset-0 m-auto flex size-9 items-center justify-center rounded-full bg-aqua text-navy"
+              >
+                <Check className="size-4" />
+              </motion.span>
+            )}
+          </AnimatePresence>
+        </div>
+
+        <div className="min-w-0">
+          <p className="text-[9px] font-semibold uppercase tracking-wider">
+            {paid ? "Paid" : step === 1 ? "Confirming…" : "Scan to pay"}
+          </p>
+          <p className="mt-0.5 font-display text-sm font-bold tabular-nums text-navy">ETB {formatETB(350)}</p>
+          <p className="mt-0.5 text-[9px]">Table 4 · Café order</p>
+        </div>
+      </div>
+    </Frame>
+  );
+}
+
+/* ---------- POS ---------- */
+
+function PosIllustration() {
+  const { ref, step } = useLoop(3, 1500);
+
+  return (
+    <Frame ref={ref}>
+      <div className="flex items-center gap-4">
+        {/* The hero's terminal at half size: 128×230 drawn, 64×115 shown */}
+        <div className="h-[116px] w-[64px]">
+          <div className="w-[128px] origin-top-left scale-50">
+            <PosTerminal stage={step === 2 ? "approved" : "ready"} amount={850} />
+          </div>
+        </div>
+
+        {/* A card that taps the terminal */}
+        <motion.div
+          className="relative h-8 w-12 rounded-md bg-linear-to-br from-blue to-navy shadow-float ring-1 ring-white/20"
+          animate={{ x: step === 1 ? -14 : 0, y: step === 1 ? -6 : 0, rotate: step === 1 ? -12 : 0 }}
+          transition={{ duration: 0.5, ease: EASE_BRAND }}
+        >
+          <span className="absolute left-1.5 top-2 h-2 w-2.5 rounded-[2px] bg-aqua/80" />
+          <span className="absolute bottom-1.5 left-1.5 h-0.5 w-6 rounded-full bg-white/50" />
+        </motion.div>
+      </div>
+    </Frame>
+  );
+}
+
+/* ---------- Disputes ---------- */
+
+const DISPUTE_STAGES = ["Opened", "Reviewing", "Resolved"];
+const DISPUTE_NOTES = ["Evidence requested", "Evidence received", "Settlement adjusted"];
+
+function DisputesIllustration() {
+  const { ref, step } = useLoop(3, 1500);
+  const resolved = step === 2;
+
+  return (
+    <Frame ref={ref}>
+      <div className="w-48 rounded-xl bg-white p-3 shadow-float">
+        <div className="flex items-center justify-between text-[10px]">
+          <span className="font-semibold text-navy">Case #DS-208</span>
+          <span
+            className={cn(
+              "rounded-full px-2 py-0.5 text-[9px] font-semibold transition-colors duration-300",
+              resolved ? "bg-aqua/20 text-navy" : "bg-navy-50 text-blue",
+            )}
+          >
+            {DISPUTE_STAGES[step]}
+          </span>
+        </div>
+        <p className="mt-1 font-display text-base font-bold tabular-nums text-navy">ETB {formatETB(580)}</p>
+
+        {/* Progress tracker */}
+        <div className="mt-3 flex items-center">
+          {DISPUTE_STAGES.map((stage, index) => (
+            <div key={stage} className={cn("flex items-center", index > 0 && "flex-1")}>
+              {index > 0 && (
+                <div className="relative mx-1 h-0.5 flex-1 overflow-hidden rounded-full bg-line">
+                  <motion.span
+                    className="absolute inset-0 origin-left bg-blue"
+                    initial={false}
+                    animate={{ scaleX: step >= index ? 1 : 0 }}
+                    transition={{ duration: 0.5, ease: EASE_BRAND }}
+                  />
+                </div>
+              )}
+              <span
+                className={cn(
+                  "size-2.5 shrink-0 rounded-full transition-colors duration-300",
+                  step >= index ? (index === 2 ? "bg-aqua" : "bg-blue") : "bg-line",
+                )}
+              />
+            </div>
+          ))}
+        </div>
+        <div className="mt-1 flex justify-between text-[8px]">
+          {DISPUTE_STAGES.map((stage) => (
+            <span key={stage}>{stage}</span>
+          ))}
+        </div>
+
+        <p className="mt-2 text-[9px] font-medium text-navy">{DISPUTE_NOTES[step]}</p>
+      </div>
+    </Frame>
+  );
+}
+
+/* ---------- Merchant app ---------- */
+
+function AppIllustration() {
+  const { ref, step } = useLoop(4, 1400);
+  const unlocked = step >= 1;
+  const balance = step === 3 ? 13680 : 12480;
+
+  return (
+    <Frame ref={ref}>
+      <div className="relative h-[118px] w-[70px] rounded-[16px] bg-navy-950 p-[4px] shadow-float ring-1 ring-white/15">
+        <div className="relative h-full overflow-hidden rounded-[12px] bg-white">
+          <span className="absolute left-1/2 top-[4px] z-10 h-[5px] w-[22px] -translate-x-1/2 rounded-full bg-navy-950" />
+
+          <AnimatePresence mode="wait" initial={false}>
+            {unlocked ? (
+              <motion.div
+                key="home"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.3 }}
+                className="flex h-full flex-col px-[6px] pt-[14px]"
+              >
+                <p className="text-[6px] font-semibold uppercase tracking-wider">Balance</p>
+                <p className="font-display text-[10px] font-bold tabular-nums text-navy">ETB {formatETB(balance)}</p>
+                <div className="mb-[6px] mt-auto flex h-[36px] items-end gap-[3px]">
+                  {[40, 65, 50, 80, 60, 95].map((height, index) => (
+                    <span
+                      key={index}
+                      className={cn("flex-1 rounded-t-[2px]", index === 5 ? "bg-aqua" : "bg-blue/70")}
+                      style={{ height: `${height}%` }}
+                    />
+                  ))}
+                </div>
+              </motion.div>
+            ) : (
+              <motion.div
+                key="lock"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.3 }}
+                className="flex h-full flex-col items-center justify-center gap-[4px]"
+              >
+                <Fingerprint className="size-5 text-blue" />
+                <p className="text-[6px] font-semibold text-navy">Touch to unlock</p>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+
+        {/* Payment notification, wider than the phone like a real banner */}
+        <AnimatePresence>
+          {step === 2 && (
+            <motion.div
+              key="notice"
+              initial={{ opacity: 0, y: -10, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -6 }}
+              transition={{ duration: 0.4, ease: EASE_BRAND }}
+              className="absolute -inset-x-12 top-5 flex items-center gap-2 rounded-xl bg-white px-2.5 py-1.5 text-[10px] shadow-float ring-1 ring-line"
+            >
+              <span className="flex size-5 shrink-0 items-center justify-center rounded-md bg-aqua/20 text-blue">
+                <ArrowDownLeft className="size-3" />
+              </span>
+              <span className="font-semibold text-navy">Payment received</span>
+              <span className="ml-auto font-semibold tabular-nums text-blue">+{formatETB(1200)}</span>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    </Frame>
+  );
+}
+
 const ILLUSTRATIONS: Record<ProductKind, () => React.JSX.Element> = {
   checkout: CheckoutIllustration,
   links: LinksIllustration,
+  qr: QrIllustration,
+  pos: PosIllustration,
   transactions: TransactionsIllustration,
   settlements: SettlementsIllustration,
+  disputes: DisputesIllustration,
+  app: AppIllustration,
 };
 
 /** Decorative, hidden from screen readers. The card's text carries the meaning. */

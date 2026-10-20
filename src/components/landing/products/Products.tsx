@@ -47,7 +47,7 @@ export function Products() {
 
         <ul className="mt-14 grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
           {items.map((product, index) => (
-            <Reveal as="li" key={product.kind} delay={index * 0.1} className="h-full">
+                <Reveal as="li" key={product.kind} delay={(index % 4) * 0.1} className="h-full">
                 <SpotlightCard className="flex h-full flex-col rounded-card border border-white/10 bg-white/4 p-5 backdrop-blur transition-[translate,border-color,background-color] duration-500 ease-brand hover:-translate-y-1.5 hover:border-aqua/40 hover:bg-white/7">
                   <ProductIllustration kind={product.kind} />
                   <h3 className="mt-6 font-display text-lg font-bold text-white">{product.title}</h3>
