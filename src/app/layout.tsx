@@ -11,7 +11,7 @@ export const metadata: Metadata = {
     template: "%s · Billpay",
   },
   description:
-    "Billpay is a payment gateway that helps businesses in Ethiopia accept and manage digital payments.",
+    "Billpay is a payment gateway that helps businesses and institutions in Ethiopia accept and manage digital payments.",
 };
 
 
