@@ -8,7 +8,7 @@ export function HeroBackground() {
       <div className="absolute inset-0 bg-linear-to-b from-blue-50 via-white to-white" />
 
       {/* Fine dot grid, faded out toward the edges */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle,rgb(27_52_97/0.07)_1px,transparent_1px)] bg-[size:22px_22px] [mask-image:radial-gradient(ellipse_70%_60%_at_70%_30%,black,transparent)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle,rgb(27_52_97/0.07)_1px,transparent_1px)] bg-size-[22px_22px] [mask-image:radial-gradient(ellipse_70%_60%_at_70%_30%,black,transparent)]" />
 
       {/* Soft color glows */}
       <div className="absolute -right-40 -top-40 size-[42rem] rounded-full bg-aqua/20 blur-3xl" />

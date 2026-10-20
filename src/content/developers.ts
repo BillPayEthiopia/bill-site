@@ -1,6 +1,5 @@
 import type { LucideIcon } from "lucide-react";
-import { BookOpen, LifeBuoy, Package } from "lucide-react";
-
+import { BookOpen, FlaskConical, LifeBuoy, Package } from "lucide-react";
 
 export type Benefit = { title: string; description: string; icon: LucideIcon };
 
@@ -15,6 +14,7 @@ export const developersContent = {
   benefits: [
     { title: "Clear documentation", description: "Step-by-step guides and copy-paste examples.", icon: BookOpen },
     { title: "Multiple SDKs", description: "Node.js, Python, PHP, and plugins for popular stores.", icon: Package },
+    { title: "Sandbox environment", description: "Test every flow safely before you go live.", icon: FlaskConical },
     { title: "Dedicated support", description: "Real engineers on the other end when you need help.", icon: LifeBuoy },
   ] satisfies Benefit[],
 };

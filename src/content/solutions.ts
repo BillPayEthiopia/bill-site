@@ -1,6 +1,5 @@
 import type { LucideIcon } from "lucide-react";
-import { Briefcase, Building2, ShoppingBag, Smartphone } from "lucide-react";
-
+import { Banknote, Briefcase, Building2, Landmark, ShoppingBag, Smartphone } from "lucide-react";
 
 export type Solution = {
   title: string;
@@ -31,7 +30,7 @@ export const solutionsContent = {
     },
     {
       title: "Service businesses",
-      description: "Get paid for your services quickly, in person or with a link, without extra hardware.",
+      description: "Get paid for your services quickly, in person with POS and QR, or with a link.",
       href: "#get-started",
       icon: Briefcase,
       image: "/solutions/service-businesses.jpg",
@@ -52,6 +51,24 @@ export const solutionsContent = {
       icon: Building2,
       image: "/solutions/enterprises.jpg",
       alt: "The Addis Ababa skyline",
+    },
+    {
+      title: "Government",
+      description:
+        "Digitize tax, license, permit, and public service payments, with real-time reconciliation and reporting.",
+      href: "#get-started",
+      icon: Landmark,
+      image: undefined,
+      alt: "A citizen paying a public service fee on their phone",
+    },
+    {
+      title: "Financial institutions",
+      description:
+        "Connect your bank or wallet to Billpay's multi-bank network and reach more merchants and citizens.",
+      href: "#get-started",
+      icon: Banknote,
+      image: undefined,
+      alt: "A bank branch in Addis Ababa",
     },
   ] satisfies Solution[],
 };

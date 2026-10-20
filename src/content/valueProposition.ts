@@ -1,7 +1,5 @@
 import type { LucideIcon } from "lucide-react";
-import { Activity, Code2, CreditCard, Globe2, Landmark, ShieldCheck, Smartphone } from "lucide-react";
-
-
+import { Activity, Code2, Cpu, CreditCard, Globe2, Landmark, Server, ShieldCheck, Smartphone } from "lucide-react";
 
 export type Feature = {
   title: string;
@@ -17,7 +15,6 @@ export type Method = {
   /** Visual balance: wide wordmarks "sm", most logos "md", compact marks "lg". Default "md". */
   size?: "sm" | "md" | "lg";
 };
-
 
 export const valueProposition = {
   eyebrow: "Why Billpay",
@@ -51,20 +48,30 @@ export const valueProposition = {
         "Accept the methods Ethiopians already use, alongside international cards, from a single integration.",
       icon: Globe2,
     },
+    {
+      title: "Enterprise-class platform",
+      description:
+        "Cloud-native microservices with high availability, built to grow with the businesses and institutions that rely on it.",
+      icon: Server,
+    },
+    {
+      title: "Powered by TAK Tech",
+      description:
+        "Backed by TAK Tech's experience in software engineering, cybersecurity, and digital infrastructure.",
+      icon: Cpu,
+    },
   ] satisfies Feature[],
 
-  /* ⚠️ Only list integrations Billpay has confirmed. Logos imply a live partnership. */
   methods: [
     { label: "telebirr", icon: Smartphone, logo: "/partners/telebirr.svg" },
     { label: "CBE Birr", icon: Smartphone, logo: "/partners/cbe-birr.svg" },
     { label: "M-Pesa", icon: Smartphone, logo: "/partners/mpesa.svg" },
-    { label: "Commercial bank of Ethiopiia", icon: Landmark, logo: "/partners/Commercial-Bank-of-Ethiopia.svg" },
+    { label: "Commercial Bank of Ethiopia", icon: Landmark, logo: "/partners/Commercial-Bank-of-Ethiopia.svg" },
     { label: "Visa", icon: CreditCard, logo: "/partners/visa.svg" },
-    { label: "Mastercard", icon: CreditCard, logo: "/partners/mastercard.svg" ,size: "sm"},
+    { label: "Mastercard", icon: CreditCard, logo: "/partners/mastercard.svg", size: "sm" },
     { label: "Bank of Abyssinia", icon: Landmark, logo: "/partners/abyssinia.svg", size: "lg" },
-    { label: "Dashen Bank", icon: Landmark, logo: "/partners/dashen.svg", size: "lg"  },
+    { label: "Dashen Bank", icon: Landmark, logo: "/partners/dashen.svg", size: "lg" },
     { label: "Awash Bank", icon: Landmark, logo: "/partners/awash.svg", size: "sm" },
     { label: "Zemen Bank", icon: Landmark, logo: "/partners/zemen.svg", size: "lg" },
-
   ] satisfies Method[],
 };

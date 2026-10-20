@@ -10,7 +10,7 @@ export type SocialLink = {
 export const footerContent = {
   tagline: "Payments for a stronger tomorrow.",
   description:
-    "Billpay is a payment gateway that helps businesses in Ethiopia accept and manage digital payments.",
+    "Billpay is a payment gateway that helps businesses in Ethiopia accept and manage digital payments. A TAK Tech venture.",
   location: "Addis Ababa, Ethiopia",
 
   social: [
