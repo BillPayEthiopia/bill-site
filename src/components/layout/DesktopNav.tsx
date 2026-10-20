@@ -8,10 +8,12 @@ import { navGroups } from "@/content/navigation";
 import { DURATION, EASE_BRAND } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 
+
 type DesktopNavProps = {
   openMenu: string | null;
   onOpenMenuChange: (label: string | null) => void;
 };
+
 
 export function DesktopNav({ openMenu, onOpenMenuChange }: DesktopNavProps) {
   const [hovered, setHovered] = useState<string | null>(null);

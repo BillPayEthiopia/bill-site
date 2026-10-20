@@ -5,6 +5,7 @@ import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { developersContent } from "@/content/developers";
 import { CodeWindow } from "./CodeWindow";
+import { WaveDivider } from "@/components/ui/WaveDivider";
 
 export function Developers() {
   const { eyebrow, title, description, primaryCta, secondaryCta, benefits } = developersContent;
@@ -16,6 +17,8 @@ export function Developers() {
       className="relative isolate overflow-hidden py-24 text-white/70 lg:py-32"
     >
       <NavyBackground />
+      <WaveDivider position="top" fill="fill-white" />
+      <WaveDivider position="bottom" fill="fill-white" />
 
       <Container>
         {/* minmax(0, …) lets the code column shrink, so long code lines scroll inside the window instead of widening the page */}

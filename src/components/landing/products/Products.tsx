@@ -5,6 +5,8 @@ import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { productsContent } from "@/content/products";
 import { ProductGrid } from "./ProductGrid";
+import { WaveDivider } from "@/components/ui/WaveDivider";
+
 
 export function Products() {
   const { eyebrow, title, description, cta, groups, items } = productsContent;
@@ -16,6 +18,8 @@ export function Products() {
       className="relative isolate overflow-hidden py-24 text-white/70 lg:py-32"
     >
       <NavyBackground />
+      <WaveDivider position="top" fill="fill-white" />
+      <WaveDivider position="bottom" fill="fill-surface" />
 
       <Container>
         <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">

@@ -1,7 +1,9 @@
 import Link from "next/link";
 import { ArrowUp, MapPin } from "lucide-react";
 import { Container } from "@/components/ui/Container";
+import { FlowingRibbons } from "@/components/ui/FlowingRibbons";
 import { Logo } from "@/components/ui/Logo";
+import { WaveDivider } from "@/components/ui/WaveDivider";
 import { footerContent } from "@/content/footer";
 import { navGroups } from "@/content/navigation";
 
@@ -16,23 +18,43 @@ export async function Footer() {
 
   return (
     <footer className="relative isolate overflow-hidden bg-navy-950 text-white/60">
+      {/* Wave edge flowing out of the grey CTA section above */}
+      <WaveDivider position="top" fill="fill-surface" />
+
       {/* Decorative layers */}
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10">
-        <div className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-aqua to-transparent" />
         <div className="absolute inset-0 bg-[radial-gradient(circle,rgb(255_255_255/0.06)_1px,transparent_1px)] bg-[size:22px_22px] [mask-image:radial-gradient(ellipse_50%_60%_at_100%_100%,black,transparent)]" />
         <div className="absolute -bottom-48 -right-32 size-[34rem] rounded-full bg-blue/20 blur-3xl" />
-        <svg
-          className="absolute -bottom-16 right-0 h-72 w-[60%] animate-drift"
+        <FlowingRibbons
           viewBox="0 0 800 300"
-          preserveAspectRatio="none"
-          fill="none"
-        >
-          <path d="M0 200 C 150 120, 300 280, 450 200 S 700 90, 800 150" className="stroke-blue/15" strokeWidth="44" strokeLinecap="round" />
-          <path d="M0 260 C 150 180, 300 340, 450 260 S 700 150, 800 210" className="stroke-aqua/10" strokeWidth="44" strokeLinecap="round" />
-        </svg>
+          strokeWidth={44}
+          className="absolute -bottom-16 right-0 h-72 w-[60%]"
+          ribbons={[
+            {
+              shapes: [
+                "M0 200 C 150 120, 300 280, 450 200 S 700 90, 800 150",
+                "M0 188 C 160 140, 290 260, 450 214 S 690 110, 800 138",
+              ],
+              className: "stroke-blue/15",
+              glowClassName: "stroke-aqua/30",
+              breathe: 10,
+              glowDelay: 1,
+            },
+            {
+              shapes: [
+                "M0 260 C 150 180, 300 340, 450 260 S 700 150, 800 210",
+                "M0 248 C 160 200, 290 320, 450 274 S 690 170, 800 198",
+              ],
+              className: "stroke-aqua/10",
+              glowClassName: "stroke-aqua/20",
+              breathe: 12,
+              glowDelay: 4,
+            },
+          ]}
+        />
       </div>
 
-      <Container className="grid gap-14 py-20 lg:grid-cols-[1.3fr_2fr] lg:gap-20 lg:py-24">
+      <Container className="grid gap-14 pb-20 pt-24 lg:grid-cols-[1.3fr_2fr] lg:gap-20 lg:pb-24 lg:pt-32">
         {/* Brand column */}
         <div className="max-w-sm">
           <Link href="/" aria-label="Billpay home" className="inline-block rounded-md">
