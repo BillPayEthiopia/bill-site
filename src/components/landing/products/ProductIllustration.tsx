@@ -276,27 +276,15 @@ function QrIllustration() {
 /* ---------- POS ---------- */
 
 function PosIllustration() {
-  const { ref, step } = useLoop(3, 1500);
+  const { ref, step } = useLoop(2, 2000);
 
   return (
     <Frame ref={ref}>
-      <div className="flex items-center gap-4">
-        {/* The hero's terminal at half size: 128×230 drawn, 64×115 shown */}
-        <div className="h-[116px] w-[64px]">
-          <div className="w-[128px] origin-top-left scale-50">
-            <PosTerminal stage={step === 2 ? "approved" : "ready"} amount={850} />
-          </div>
+      {/* The hero's terminal at about a third of its size */}
+      <div className="h-[118px] w-[52px]">
+        <div className="w-[148px] origin-top-left scale-[0.34]">
+          <PosTerminal stage={step === 1 ? "approved" : "ready"} amount={850} />
         </div>
-
-        {/* A card that taps the terminal */}
-        <motion.div
-          className="relative h-8 w-12 rounded-md bg-linear-to-br from-blue to-navy shadow-float ring-1 ring-white/20"
-          animate={{ x: step === 1 ? -14 : 0, y: step === 1 ? -6 : 0, rotate: step === 1 ? -12 : 0 }}
-          transition={{ duration: 0.5, ease: EASE_BRAND }}
-        >
-          <span className="absolute left-1.5 top-2 h-2 w-2.5 rounded-[2px] bg-aqua/80" />
-          <span className="absolute bottom-1.5 left-1.5 h-0.5 w-6 rounded-full bg-white/50" />
-        </motion.div>
       </div>
     </Frame>
   );

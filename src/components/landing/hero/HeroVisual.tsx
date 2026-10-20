@@ -41,13 +41,14 @@ type Composition = { width: number; height: number; place: Partial<Record<Device
  * then the whole canvas is scaled to fit the column.
  */
 const FULL: Composition = {
-  width: 760,
-  height: 610,
+  width: 810,
+  height: 585,
   place: {
-    laptop: { x: 160, y: 20 },
-    tablet: { x: 440, y: 370 },
-    pos: { x: 292, y: 360 },
-    phone: { x: 40, y: 118 },
+    laptop: { x: 150, y: 10 },
+    // Tablet and POS overlap the lower half of the laptop screen
+    tablet: { x: 492, y: 250 },
+    pos: { x: 298, y: 222 },
+    phone: { x: 20, y: 100 },
   },
 };
 
@@ -57,7 +58,7 @@ const COMPACT: Composition = {
   height: 540,
   place: {
     laptop: { x: 60, y: 0, scale: 0.6 },
-    pos: { x: 262, y: 300, scale: 0.85 },
+    pos: { x: 268, y: 165, scale: 0.7 },
     phone: { x: 16, y: 100, scale: 0.9 },
   },
 };
@@ -207,7 +208,7 @@ export function HeroVisual() {
       aria-hidden="true"
       onPointerMove={handlePointerMove}
       onPointerLeave={resetTilt}
-      className="relative mx-auto aspect-[420/540] w-full max-w-[26rem] sm:aspect-[760/610] sm:max-w-[44rem] lg:max-w-none"
+      className="relative mx-auto aspect-[420/540] w-full max-w-[26rem] sm:aspect-[810/585] sm:max-w-[44rem] lg:max-w-none"
     >
       {/* Glows behind the devices */}
       <div className="pointer-events-none absolute inset-[12%] rounded-full bg-aqua/25 blur-3xl" />
