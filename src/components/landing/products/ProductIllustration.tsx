@@ -1,27 +1,31 @@
 "use client";
 
-import { useEffect, useRef, useState, type ComponentProps } from "react";
-import { AnimatePresence, motion, useInView, useReducedMotion } from "motion/react";
+import { useEffect, useState, type ComponentProps } from "react";
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { ArrowDownLeft, Check, Copy, Fingerprint, Landmark, Link2 } from "lucide-react";
 import type { ProductKind } from "@/content/products";
 import { PosTerminal } from "@/components/landing/hero/devices/PosTerminal";
 import { EASE_BRAND } from "@/lib/motion";
 import { cn, formatETB } from "@/lib/utils";
 
-/** Cycles through 0…steps-1 while visible. Reduced motion shows the final step. */
-function useLoop(steps: number, intervalMs: number) {
-  const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { amount: 0.5 });
+type IllustrationProps = { active: boolean };
+
+/**
+ * Steps through 0…steps-1 while active. When inactive (or with reduced motion),
+ * shows the last step: the finished state, like "Paid" or "Settled".
+ * The grid remounts the illustration each time it becomes active, so it starts at step 0.
+ */
+function useLoop(steps: number, intervalMs: number, active: boolean) {
   const reduceMotion = useReducedMotion();
-  const [step, setStep] = useState(0);
+  const [tick, setTick] = useState(0);
 
   useEffect(() => {
-    if (!inView || reduceMotion) return;
-    const id = window.setInterval(() => setStep((s) => (s + 1) % steps), intervalMs);
+    if (!active || reduceMotion) return;
+    const id = window.setInterval(() => setTick((t) => t + 1), intervalMs);
     return () => window.clearInterval(id);
-  }, [inView, reduceMotion, steps, intervalMs]);
+  }, [active, reduceMotion, intervalMs]);
 
-  return { ref, step: reduceMotion ? steps - 1 : step };
+  return { step: active && !reduceMotion ? tick % steps : steps - 1 };
 }
 
 /** The dark stage every illustration sits on. */
@@ -34,12 +38,14 @@ function Frame(props: ComponentProps<"div">) {
   );
 }
 
-function CheckoutIllustration() {
-  const { ref, step } = useLoop(4, 1100);
+/* ---------- Checkout ---------- */
+
+function CheckoutIllustration({ active }: IllustrationProps) {
+  const { step } = useLoop(4, 1100, active);
   const paid = step === 3;
 
   return (
-    <Frame ref={ref}>
+    <Frame>
       <div className="w-44 rounded-xl bg-white p-3 shadow-float">
         <p className="text-[9px] font-semibold uppercase tracking-wider">Card number</p>
         <div className="mt-1 flex h-7 items-center rounded-md border border-line px-2 text-[11px] font-semibold tabular-nums text-navy">
@@ -66,11 +72,13 @@ function CheckoutIllustration() {
   );
 }
 
-function LinksIllustration() {
-  const { ref, step } = useLoop(3, 1300);
+/* ---------- Payment links ---------- */
+
+function LinksIllustration({ active }: IllustrationProps) {
+  const { step } = useLoop(3, 1300, active);
 
   return (
-    <Frame ref={ref}>
+    <Frame>
       <div className="relative w-48">
         <div className="flex items-center gap-2 rounded-full bg-white px-3 py-2 text-[11px] font-medium text-navy shadow-float">
           <Link2 className="size-3.5 shrink-0 text-blue" />
@@ -93,12 +101,12 @@ function LinksIllustration() {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -6 }}
               transition={{ duration: 0.4, ease: EASE_BRAND }}
-              className="absolute inset-x-3 top-12 flex items-center gap-2 rounded-xl bg-white px-3 py-2 text-[11px] shadow-float"
+              className="absolute inset-x-3 top-12 flex items-center gap-2 whitespace-nowrap rounded-xl bg-white px-3 py-2 text-[11px] shadow-float"
             >
-              <span className="flex size-6 items-center justify-center rounded-lg bg-aqua/20 text-blue">
+              <span className="flex size-6 shrink-0 items-center justify-center rounded-lg bg-aqua/20 text-blue">
                 <ArrowDownLeft className="size-3.5" />
               </span>
-              <span className="font-semibold text-navy">Payment received</span>
+              <span className="font-semibold text-navy">Received</span>
               <span className="ml-auto font-semibold tabular-nums text-blue">+ETB {formatETB(500)}</span>
             </motion.div>
           )}
@@ -108,6 +116,8 @@ function LinksIllustration() {
   );
 }
 
+/* ---------- Transactions ---------- */
+
 const SAMPLE_TX = [
   { label: "Payment received", amount: 2450 },
   { label: "Refund issued", amount: -580 },
@@ -115,11 +125,11 @@ const SAMPLE_TX = [
   { label: "Payment received", amount: 3875.5 },
 ];
 
-function TransactionsIllustration() {
-  const { ref, step } = useLoop(SAMPLE_TX.length, 1500);
+function TransactionsIllustration({ active }: IllustrationProps) {
+  const { step } = useLoop(SAMPLE_TX.length, 1500, active);
 
   return (
-    <Frame ref={ref}>
+    <Frame>
       <ul className="w-full max-w-52 space-y-1.5">
         <AnimatePresence initial={false} mode="popLayout">
           {[0, 1, 2].map((offset) => {
@@ -150,12 +160,14 @@ function TransactionsIllustration() {
   );
 }
 
-function SettlementsIllustration() {
-  const { ref, step } = useLoop(3, 1500);
+/* ---------- Settlements ---------- */
+
+function SettlementsIllustration({ active }: IllustrationProps) {
+  const { step } = useLoop(3, 1500, active);
   const settled = step === 2;
 
   return (
-    <Frame ref={ref}>
+    <Frame>
       <div className="w-48 rounded-xl bg-white p-3 shadow-float">
         <div className="flex items-center justify-between text-[10px]">
           <span className="font-semibold text-navy">{settled ? "Settled to bank" : "Next settlement"}</span>
@@ -184,7 +196,6 @@ function SettlementsIllustration() {
   );
 }
 
-
 /* ---------- QR ---------- */
 
 const FINDERS: [number, number][] = [
@@ -209,13 +220,13 @@ const QR_CELLS = (() => {
   return cells;
 })();
 
-function QrIllustration() {
-  const { ref, step } = useLoop(3, 1400);
+function QrIllustration({ active }: IllustrationProps) {
+  const { step } = useLoop(3, 1400, active);
   const reduceMotion = useReducedMotion();
   const paid = step === 2;
 
   return (
-    <Frame ref={ref}>
+    <Frame>
       <div className="flex w-48 items-center gap-3 rounded-xl bg-white p-3 shadow-float">
         <div className="relative size-16 shrink-0 overflow-hidden rounded-md">
           <svg
@@ -275,11 +286,11 @@ function QrIllustration() {
 
 /* ---------- POS ---------- */
 
-function PosIllustration() {
-  const { ref, step } = useLoop(2, 2000);
+function PosIllustration({ active }: IllustrationProps) {
+  const { step } = useLoop(2, 2000, active);
 
   return (
-    <Frame ref={ref}>
+    <Frame>
       {/* The hero's terminal at about a third of its size */}
       <div className="h-[118px] w-[52px]">
         <div className="w-[148px] origin-top-left scale-[0.34]">
@@ -295,12 +306,12 @@ function PosIllustration() {
 const DISPUTE_STAGES = ["Opened", "Reviewing", "Resolved"];
 const DISPUTE_NOTES = ["Evidence requested", "Evidence received", "Settlement adjusted"];
 
-function DisputesIllustration() {
-  const { ref, step } = useLoop(3, 1500);
+function DisputesIllustration({ active }: IllustrationProps) {
+  const { step } = useLoop(3, 1500, active);
   const resolved = step === 2;
 
   return (
-    <Frame ref={ref}>
+    <Frame>
       <div className="w-48 rounded-xl bg-white p-3 shadow-float">
         <div className="flex items-center justify-between text-[10px]">
           <span className="font-semibold text-navy">Case #DS-208</span>
@@ -352,13 +363,13 @@ function DisputesIllustration() {
 
 /* ---------- Merchant app ---------- */
 
-function AppIllustration() {
-  const { ref, step } = useLoop(4, 1400);
+function AppIllustration({ active }: IllustrationProps) {
+  const { step } = useLoop(4, 1400, active);
   const unlocked = step >= 1;
   const balance = step === 3 ? 13680 : 12480;
 
   return (
-    <Frame ref={ref}>
+    <Frame>
       <div className="relative h-[118px] w-[70px] rounded-[16px] bg-navy-950 p-[4px] shadow-float ring-1 ring-white/15">
         <div className="relative h-full overflow-hidden rounded-[12px] bg-white">
           <span className="absolute left-1/2 top-[4px] z-10 h-[5px] w-[22px] -translate-x-1/2 rounded-full bg-navy-950" />
@@ -425,7 +436,9 @@ function AppIllustration() {
   );
 }
 
-const ILLUSTRATIONS: Record<ProductKind, () => React.JSX.Element> = {
+/* ---------- Registry ---------- */
+
+const ILLUSTRATIONS: Record<ProductKind, (props: IllustrationProps) => React.JSX.Element> = {
   checkout: CheckoutIllustration,
   links: LinksIllustration,
   qr: QrIllustration,
@@ -437,11 +450,11 @@ const ILLUSTRATIONS: Record<ProductKind, () => React.JSX.Element> = {
 };
 
 /** Decorative, hidden from screen readers. The card's text carries the meaning. */
-export function ProductIllustration({ kind }: { kind: ProductKind }) {
+export function ProductIllustration({ kind, active }: { kind: ProductKind; active: boolean }) {
   const Illustration = ILLUSTRATIONS[kind];
   return (
     <div aria-hidden="true">
-      <Illustration />
+      <Illustration active={active} />
     </div>
   );
 }
