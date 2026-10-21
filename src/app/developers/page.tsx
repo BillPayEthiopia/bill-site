@@ -1,5 +1,9 @@
 import type { Metadata } from "next";
-import { Environments, PaymentFlow, Quickstart } from "@/components/developers/DeveloperSections";
+import {
+  Environments,
+  PaymentFlow,
+  Quickstart,
+} from "@/components/developers/DeveloperSections";
 import { CallToAction } from "@/components/landing/CallToAction";
 import { CodeWindow } from "@/components/landing/developers/CodeWindow";
 import { CardGrid } from "@/components/page/CardGrid";
@@ -29,7 +33,7 @@ export default function DevelopersPage() {
             <Button href="#quickstart" size="lg" arrow>
               Start the quickstart
             </Button>
-            <Button href="/#get-started" variant="outline" size="lg">
+            <Button href="/contact" variant="outline" size="lg">
               Request sandbox access
             </Button>
           </>

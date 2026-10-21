@@ -8,7 +8,7 @@ export const securityContent = {
   title: ["Your trust", "matters."],
   description:
     "We follow strict security practices and industry standards to keep your data and transactions safe, always.",
-  cta: { label: "Learn more about security", href: "#get-started" },
+  cta: { label: "Learn more about security", href: "/security" },
 
   points: [
     { title: "Advanced encryption", description: "Your data is protected in transit and at rest.", icon: Lock },

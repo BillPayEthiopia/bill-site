@@ -1,5 +1,15 @@
 import type { LucideIcon } from "lucide-react";
-import { BadgeCheck, BellRing, BookOpen, Code2, FlaskConical, LifeBuoy, Link2, Smartphone, Terminal } from "lucide-react";
+import {
+  BadgeCheck,
+  BellRing,
+  BookOpen,
+  Code2,
+  FlaskConical,
+  LifeBuoy,
+  Link2,
+  Smartphone,
+  Terminal,
+} from "lucide-react";
 import type { CardItem } from "@/components/page/CardGrid";
 
 /*
@@ -44,20 +54,50 @@ export const developersPage = {
   flow: {
     eyebrow: "How it works",
     title: ["How a payment flows", "through Billpay."] as [string, string],
-    description: "Five steps from your server to a confirmed payment. Your code handles two of them.",
+    description:
+      "Five steps from your server to a confirmed payment. Your code handles two of them.",
     steps: [
-      { actor: "you", title: "Create a payment", description: "Your server sends the amount and order details to the Billpay API.", icon: Code2 },
-      { actor: "billpay", title: "Get a checkout link", description: "Billpay returns a secure checkout URL for that payment.", icon: Link2 },
-      { actor: "customer", title: "Customer pays", description: "They pick their bank or wallet and confirm on Billpay's checkout page.", icon: Smartphone },
-      { actor: "billpay", title: "You're notified", description: "Billpay notifies your server as soon as the payment status changes.", icon: BellRing },
-      { actor: "you", title: "Verify and deliver", description: "Confirm the status with the API, then fulfil the order.", icon: BadgeCheck },
+      {
+        actor: "you",
+        title: "Create a payment",
+        description:
+          "Your server sends the amount and order details to the Billpay API.",
+        icon: Code2,
+      },
+      {
+        actor: "billpay",
+        title: "Get a checkout link",
+        description: "Billpay returns a secure checkout URL for that payment.",
+        icon: Link2,
+      },
+      {
+        actor: "customer",
+        title: "Customer pays",
+        description:
+          "They pick their bank or wallet and confirm on Billpay's checkout page.",
+        icon: Smartphone,
+      },
+      {
+        actor: "billpay",
+        title: "You're notified",
+        description:
+          "Billpay notifies your server as soon as the payment status changes.",
+        icon: BellRing,
+      },
+      {
+        actor: "you",
+        title: "Verify and deliver",
+        description: "Confirm the status with the API, then fulfil the order.",
+        icon: BadgeCheck,
+      },
     ] satisfies FlowStep[],
   },
 
   quickstart: {
     eyebrow: "Quickstart",
     title: ["Your first payment", "in six steps."] as [string, string],
-    description: "Follow along in the sandbox. The examples use Node.js, but any language that can send an HTTP request works.",
+    description:
+      "Follow along in the sandbox. The examples use Node.js, but any language that can send an HTTP request works.",
     steps: [
       {
         title: "Get your sandbox keys",
@@ -149,13 +189,15 @@ BILLPAY_SECRET_KEY=your_live_secret_key`,
   environments: {
     eyebrow: "Environments",
     title: ["Test safely,", "then go live."] as [string, string],
-    description: "Two separate environments with separate keys, so nothing you test can touch real money.",
+    description:
+      "Two separate environments with separate keys, so nothing you test can touch real money.",
     items: [
       {
         mode: "test",
         name: "Sandbox",
         tag: "Test mode",
-        description: "A safe copy of Billpay for building and testing. Payments are simulated, so no real money moves.",
+        description:
+          "A safe copy of Billpay for building and testing. Payments are simulated, so no real money moves.",
         points: [
           "Simulated bank and wallet payments",
           "Test successes, failures, and refunds",
@@ -168,7 +210,8 @@ BILLPAY_SECRET_KEY=your_live_secret_key`,
         mode: "live",
         name: "Production",
         tag: "Live",
-        description: "Real payments from real customers, available once your business is verified.",
+        description:
+          "Real payments from real customers, available once your business is verified.",
         points: [
           "Real bank and wallet payments",
           "Settlements to your bank account",
@@ -185,10 +228,31 @@ BILLPAY_SECRET_KEY=your_live_secret_key`,
     title: ["Everything else", "you need."] as [string, string],
     description: "Reach out and we'll get you set up.",
     items: [
-      { title: "Documentation", description: "Guides for every integration, from checkout to settlements.", icon: BookOpen, href: "/#get-started" },
-      { title: "API reference", description: "Every endpoint, parameter, and response.", icon: Terminal, href: "/#get-started" },
-      { title: "Sandbox access", description: "Request test keys and start building today.", icon: FlaskConical, href: "/#get-started" },
-      { title: "Developer support", description: "Talk to our engineers when you get stuck.", icon: LifeBuoy, href: "/#get-started" },
+      {
+        title: "Documentation",
+        description:
+          "Guides for every integration, from checkout to settlements.",
+        icon: BookOpen,
+        href: "/contact",
+      },
+      {
+        title: "API reference",
+        description: "Every endpoint, parameter, and response.",
+        icon: Terminal,
+        href: "/contact",
+      },
+      {
+        title: "Sandbox access",
+        description: "Request test keys and start building today.",
+        icon: FlaskConical,
+        href: "/contact",
+      },
+      {
+        title: "Developer support",
+        description: "Talk to our engineers when you get stuck.",
+        icon: LifeBuoy,
+        href: "/contact",
+      },
     ] satisfies CardItem[],
   },
 };

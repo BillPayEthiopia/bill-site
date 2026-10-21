@@ -36,18 +36,26 @@ export default function SolutionsPage() {
             <Button href={SIGN_UP_URL} size="lg" arrow>
               Get started
             </Button>
-            <Button href="/#get-started" variant="outline" size="lg">
+            <Button href="/contact" variant="outline" size="lg">
               Talk to our team
             </Button>
           </>
         }
       >
-        <PhotoPanel image="/solutions/enterprises.jpg" alt="The Addis Ababa skyline" icon={Building2} priority />
+        <PhotoPanel
+          image="/solutions/enterprises.jpg"
+          alt="The Addis Ababa skyline"
+          icon={Building2}
+          priority
+        />
       </PageHero>
 
       <JumpNav
         label="Solutions on this page"
-        links={ordered.map((item) => ({ label: item.title, href: `#${item.id}` }))}
+        links={ordered.map((item) => ({
+          label: item.title,
+          href: `#${item.id}`,
+        }))}
       />
 
       <section aria-label="Solutions" className="bg-white py-24 lg:py-32">
@@ -61,7 +69,13 @@ export default function SolutionsPage() {
               description={item.description}
               points={item.points}
               reverse={index % 2 === 1}
-              visual={<PhotoPanel image={item.image} alt={item.alt} icon={item.icon} />}
+              visual={
+                <PhotoPanel
+                  image={item.image}
+                  alt={item.alt}
+                  icon={item.icon}
+                />
+              }
             />
           ))}
         </Container>
