@@ -31,14 +31,17 @@ export type NavItem = {
   icon?: LucideIcon;
 };
 
-
 export type NavGroup = {
   label: string;
-  /** The page section this group introduces. */
+  /** The page or section this group introduces. */
   href: string;
   items: NavItem[];
 };
 
+/*
+ * Every href starts with "/" so links work from any page, not just the home page.
+ * When a dedicated page exists, swap "/#section" for its route (e.g. "/products").
+ */
 export const navGroups: NavGroup[] = [
   {
     label: "Products",
@@ -78,15 +81,14 @@ export const navGroups: NavGroup[] = [
   },
   {
     label: "Company",
-    href: "/#why-billpay",
+    href: "/about",
     items: [
-      { label: "About Billpay", href: "/#why-billpay", icon: Info, description: "Who we are, and our place in the TAK Tech family." },
+      { label: "About Billpay", href: "/about", icon: Info, description: "Who we are, and our place in the TAK Tech family." },
       { label: "Security", href: "/#security", icon: ShieldCheck, description: "How we keep payments safe." },
       { label: "Contact", href: "/#get-started", icon: Mail, description: "Talk to our team." },
     ],
   },
 ];
-
 
 export const navActions = {
   /** Set to the dashboard URL when it exists. The link stays hidden while this is null. */
