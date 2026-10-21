@@ -58,16 +58,17 @@ export const navGroups: NavGroup[] = [
   
   {
     label: "Solutions",
-    href: "/#solutions",
+    href: "/solutions",
     items: [
-      { label: "E-commerce", href: "/#solutions", icon: ShoppingBag, description: "Accept payments in your online store." },
-      { label: "Service businesses", href: "/#solutions", icon: Briefcase, description: "Get paid for the services you provide." },
-      { label: "Digital platforms", href: "/#solutions", icon: Smartphone, description: "Build payments into your app or platform." },
-      { label: "Enterprises", href: "/#solutions", icon: Building, description: "Payment infrastructure for larger operations." },
-      { label: "Government", href: "/#solutions", icon: Landmark, description: "Digital collection of taxes, fees, and public service charges." },
-      { label: "Financial institutions", href: "/#solutions", icon: Banknote, description: "Connect your bank or wallet to a wider payment network." },
+      { label: "Government", href: "/solutions#government", icon: Landmark, description: "Digital collection of taxes, fees, and public service charges." },
+      { label: "E-commerce", href: "/solutions#e-commerce", icon: ShoppingBag, description: "Accept payments in your online store." },
+      { label: "Service businesses", href: "/solutions#service-businesses", icon: Briefcase, description: "Get paid for the services you provide." },
+      { label: "Digital platforms", href: "/solutions#digital-platforms", icon: Smartphone, description: "Build payments into your app or platform." },
+      { label: "Enterprises", href: "/solutions#enterprises", icon: Building, description: "Payment infrastructure for larger operations." },
+      { label: "Financial institutions", href: "/solutions#financial-institutions", icon: Banknote, description: "Connect your bank or wallet to a wider payment network." },
     ],
   },
+  
   {
     label: "Developers",
     href: "/#developers",
