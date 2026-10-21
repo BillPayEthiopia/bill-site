@@ -6,19 +6,19 @@ import {
   Building,
   CreditCard,
   FlaskConical,
+  GitBranch,
   Info,
   Landmark,
   LayoutDashboard,
   Link as LinkIcon,
   Mail,
-  Package,
   QrCode,
+  Rocket,
   Scale,
   ShieldCheck,
   ShoppingBag,
   Smartphone,
   Store,
-  Terminal,
   Wallet,
 } from "lucide-react";
 
@@ -71,14 +71,15 @@ export const navGroups: NavGroup[] = [
   
   {
     label: "Developers",
-    href: "/#developers",
+    href: "/developers",
     items: [
-      { label: "Documentation", href: "/#developers", icon: BookOpen, description: "Guides for integrating Billpay." },
-      { label: "API reference", href: "/#developers", icon: Terminal, description: "Endpoints, parameters, and responses." },
-      { label: "SDKs", href: "/#developers", icon: Package, description: "Libraries for popular languages." },
-      { label: "Sandbox", href: "/#developers", icon: FlaskConical, description: "Test your integration safely before going live." },
+      { label: "How payments work", href: "/developers#flow", icon: GitBranch, description: "The five steps from your server to a confirmed payment." },
+      { label: "Quickstart", href: "/developers#quickstart", icon: Rocket, description: "Your first payment, step by step." },
+      { label: "Sandbox", href: "/developers#environments", icon: FlaskConical, description: "Test your integration safely before going live." },
+      { label: "Resources", href: "/developers#resources", icon: BookOpen, description: "Docs, API reference, and developer support." },
     ],
   },
+  
   {
     label: "Company",
     href: "/about",

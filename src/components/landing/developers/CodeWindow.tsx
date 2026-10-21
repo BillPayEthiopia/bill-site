@@ -6,25 +6,11 @@ import { Check, Copy } from "lucide-react";
 import { codeSamples, type Language } from "@/content/developers";
 import { EASE_BRAND } from "@/lib/motion";
 import { cn } from "@/lib/utils";
+import { highlight } from "@/lib/highlight";
 
 const LANGUAGES = Object.keys(codeSamples) as Language[];
 
-/* ---- A tiny highlighter: strings, comments, numbers, keywords, function calls ---- */
-const TOKEN =
-  /("[^"]*"|'[^']*')|(\/\/.*|#.*)|(\b\d+(?:\.\d+)?\b)|(\b(?:import|from|const|new|await|return|export|def|print|async|curl)\b)|([A-Za-z_][\w.]*)(?=\()|(\s+|\S+)/g;
 
-const TOKEN_CLASS = ["text-aqua", "text-white/40 italic", "text-amber-200", "text-sky-300", "text-blue-200", "text-white/85"];
-
-function highlight(line: string) {
-  return Array.from(line.matchAll(TOKEN), (match, index) => {
-    const group = match.slice(1).findIndex((part) => part !== undefined);
-    return (
-      <span key={index} className={TOKEN_CLASS[group]}>
-        {match[0]}
-      </span>
-    );
-  });
-}
 
 export function CodeWindow() {
   const [language, setLanguage] = useState<Language>("node");
