@@ -38,25 +38,24 @@ export type NavGroup = {
   items: NavItem[];
 };
 
-/*
- * Every href starts with "/" so links work from any page, not just the home page.
- * When a dedicated page exists, swap "/#section" for its route (e.g. "/products").
- */
+
+
 export const navGroups: NavGroup[] = [
   {
     label: "Products",
-    href: "/#products",
+    href: "/products",
     items: [
-      { label: "Checkout", href: "/#products", icon: CreditCard, description: "A secure payment page for your customers." },
-      { label: "Payment Links", href: "/#products", icon: LinkIcon, description: "Create and share links to get paid." },
-      { label: "QR Payments", href: "/#products", icon: QrCode, description: "Let customers pay by scanning a code." },
-      { label: "POS Payments", href: "/#products", icon: Store, description: "Accept in-person payments alongside your digital channels." },
-      { label: "Transactions", href: "/#products", icon: LayoutDashboard, description: "Monitor and manage every payment." },
-      { label: "Settlements", href: "/#products", icon: Wallet, description: "Track when and how you get paid out." },
-      { label: "Disputes & Refunds", href: "/#products", icon: Scale, description: "Resolve contested payments fairly and on time." },
-      { label: "Merchant App", href: "/#products", icon: Smartphone, description: "Run your business and get paid from your phone." },
+      { label: "Checkout", href: "/products#checkout", icon: CreditCard, description: "A secure payment page for your customers." },
+      { label: "Payment Links", href: "/products#payment-links", icon: LinkIcon, description: "Create and share links to get paid." },
+      { label: "QR Payments", href: "/products#qr", icon: QrCode, description: "Let customers pay by scanning a code." },
+      { label: "POS Payments", href: "/products#pos", icon: Store, description: "Accept in-person payments alongside your digital channels." },
+      { label: "Transactions", href: "/products#transactions", icon: LayoutDashboard, description: "Monitor and manage every payment." },
+      { label: "Settlements", href: "/products#settlements", icon: Wallet, description: "Track when and how you get paid out." },
+      { label: "Disputes & Refunds", href: "/products#disputes", icon: Scale, description: "Resolve contested payments fairly and on time." },
+      { label: "Merchant App", href: "/products#merchant-app", icon: Smartphone, description: "Run your business and get paid from your phone." },
     ],
   },
+  
   {
     label: "Solutions",
     href: "/#solutions",
