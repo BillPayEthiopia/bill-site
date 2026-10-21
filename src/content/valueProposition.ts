@@ -21,7 +21,7 @@ export const valueProposition = {
   title: ["Built for businesses", "that move forward."],
   description:
     "From startups to enterprises, Billpay gives you the tools, security, and flexibility to accept payments and manage your business, your way.",
-  cta: { label: "Explore products", href: "#products" },
+  cta: { label: "Explore products", href: "/products" },
 
   features: [
     {

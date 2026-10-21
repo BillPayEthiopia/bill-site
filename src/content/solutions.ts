@@ -77,7 +77,7 @@ export const solutionsContent = {
         "Digitize tax, license, permit, and public service payments, with real-time reconciliation and reporting.",
       href: "/solutions#government",
       icon: Landmark,
-      image: undefined,
+      image: "/solutions/government.jpg",
       alt: "A citizen paying a public service fee on their phone",
       points: [
         "Tax collection",
@@ -96,7 +96,7 @@ export const solutionsContent = {
         "Connect your bank or wallet to Billpay's multi-bank network and reach more merchants and citizens.",
       href: "/solutions#financial-institutions",
       icon: Banknote,
-      image: undefined,
+      image: "/solutions/financial-institutions.jpg",
       alt: "A bank branch in Addis Ababa",
       points: [
         "Banking and wallet integrations",

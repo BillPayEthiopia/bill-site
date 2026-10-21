@@ -88,7 +88,7 @@ export const productsPage = {
             "Settled with your other channels",
           ],
         },
-      ] satisfies ProductDetail[],
+      ] as ProductDetail[],
     },
     {
       id: "manage",
@@ -161,7 +161,7 @@ export const productsPage = {
             "Instant notifications",
           ],
         },
-      ] satisfies ProductDetail[],
+      ] as ProductDetail[],
     },
   ],
 

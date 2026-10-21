@@ -13,7 +13,7 @@ export const heroContent = {
   description:
     "Billpay is a payment gateway that helps businesses accept payments, manage transactions, and grow. all in one place.",
   primaryCta: { label: "Get started", href: SIGN_UP_URL },
-  secondaryCta: { label: "Explore products", href: "#products" },
+  secondaryCta: { label: "Explore products", href: "/products" },
 
   paymentMethods: [
     { label: "Cards", icon: CreditCard },
