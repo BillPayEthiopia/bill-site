@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { solutionsContent, type Solution } from "@/content/solutions";
+import { Carousel } from "@/components/ui/Carousel";
 
 function SolutionCard({ title, description, href, icon: Icon, image, alt }: Solution) {
   return (
@@ -16,7 +17,7 @@ function SolutionCard({ title, description, href, icon: Icon, image, alt }: Solu
             src={image}
             alt={alt}
             fill
-                        sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 85vw"
+            sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 85vw"
             className="object-cover transition-transform duration-700 ease-brand group-hover:scale-105"
           />
         ) : (

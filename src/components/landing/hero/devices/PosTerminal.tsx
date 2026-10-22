@@ -57,7 +57,7 @@ export function PosTerminal({ stage, amount }: { stage: PosStage; amount: number
   const approved = stage === "approved";
 
   return (
-    <div className="relative w-[148px]" style={SLANT}>
+      <div className="relative w-[148px]">
       {/* Receipt, printing out from behind the printer cover */}
       <motion.div
         className="absolute inset-x-[30px] bottom-[calc(100%-14px)] overflow-hidden"

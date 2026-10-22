@@ -39,24 +39,25 @@ type Composition = { width: number; height: number; place: Record<DeviceId, Plac
 
 const FULL: Composition = {
   width: 760,
-  height: 510,
+  height: 490,
   place: {
     laptop: { x: 80, y: 0 },
-    pos: { x: 100, y: 216, scale: 0.8 },
-    tablet: { x: 486, y: 300, scale: 0.85 },
+    pos: { x: 100, y: 165, scale: 0.92 },
+    tablet: { x: 486, y: 266, scale: 0.85 },
   },
 };
 
 /** Phones: the same arrangement, smaller. */
 const COMPACT: Composition = {
   width: 420,
-  height: 400,
+  height: 420,
   place: {
     laptop: { x: 24, y: 0, scale: 0.62 },
-    pos: { x: 100, y: 168, scale: 0.62 },
-    tablet: { x: 226, y: 250, scale: 0.6 },
+    pos: { x: 8, y: 150, scale: 0.7 },
+    tablet: { x: 226, y: 210, scale: 0.6 },
   },
 };
+
 
 /** Picks the composition for this screen and scales it to the stage's width. */
 function useComposition() {
@@ -196,8 +197,9 @@ export function HeroVisual() {
       aria-hidden="true"
       onPointerMove={handlePointerMove}
       onPointerLeave={resetTilt}
-      className="relative mx-auto aspect-[420/400] w-full max-w-[26rem] sm:aspect-[760/510] sm:max-w-[44rem] lg:max-w-none"
+      className="relative mx-auto aspect-[420/420] w-full max-w-[26rem] sm:aspect-[760/490] sm:max-w-[44rem] lg:max-w-none"
     >
+
       {/* Glows behind the devices */}
       <div className="pointer-events-none absolute inset-[12%] rounded-full bg-aqua/25 blur-3xl" />
       <div className="pointer-events-none absolute right-0 top-0 size-1/3 rounded-full bg-blue/15 blur-3xl" />
