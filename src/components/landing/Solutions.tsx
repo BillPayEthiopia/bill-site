@@ -6,18 +6,28 @@ import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { solutionsContent, type Solution } from "@/content/solutions";
-import { Carousel } from "@/components/ui/Carousel";
 
-function SolutionCard({ title, description, href, icon: Icon, image, alt }: Solution) {
+/** Seconds for the row to travel one full set of cards. Higher = slower. */
+const SPEED = 60;
+
+function SolutionCard({
+  title,
+  description,
+  href,
+  icon: Icon,
+  image,
+  alt,
+  duplicate = false,
+}: Solution & { duplicate?: boolean }) {
   return (
     <article className="group flex h-full flex-col overflow-hidden rounded-card border border-line bg-white shadow-card transition-[translate,box-shadow] duration-500 ease-brand hover:-translate-y-1.5 hover:shadow-float">
       <div className="relative aspect-4/3 overflow-hidden">
         {image ? (
           <Image
             src={image}
-            alt={alt}
+            alt={duplicate ? "" : alt}
             fill
-            sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 85vw"
+            sizes="(min-width: 640px) 336px, 304px"
             className="object-cover transition-transform duration-700 ease-brand group-hover:scale-105"
           />
         ) : (
@@ -43,6 +53,7 @@ function SolutionCard({ title, description, href, icon: Icon, image, alt }: Solu
         <p className="mt-2 flex-1 text-sm leading-relaxed">{description}</p>
         <Link
           href={href}
+          tabIndex={duplicate ? -1 : undefined}
           className="group/link mt-5 inline-flex items-center gap-1.5 font-display text-sm font-semibold text-blue"
         >
           Learn more
@@ -60,7 +71,7 @@ export function Solutions() {
   const { eyebrow, title, description, cta, items } = solutionsContent;
 
   return (
-    <section id="solutions" aria-labelledby="solutions-title" className="bg-surface py-24 lg:py-32">
+    <section id="solutions" aria-labelledby="solutions-title" className="overflow-hidden bg-surface py-24 lg:py-32">
       <Container>
         <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
           <Reveal>
@@ -83,21 +94,31 @@ export function Solutions() {
             </Button>
           </Reveal>
         </div>
-
-        {/* Swipeable row on phones; 2 columns on tablets; 3 on desktop (two even rows) */}
-        <ul className="-mx-[clamp(1.25rem,4vw,4rem)] mt-14 flex snap-x snap-mandatory scroll-px-[clamp(1.25rem,4vw,4rem)] gap-5 overflow-x-auto px-[clamp(1.25rem,4vw,4rem)] pb-4 [scrollbar-width:none] sm:mx-0 sm:grid sm:grid-cols-2 sm:overflow-visible sm:px-0 sm:pb-0 lg:grid-cols-3">
-          {items.map((solution, index) => (
-            <Reveal
-              as="li"
-              key={solution.title}
-              delay={(index % 3) * 0.1}
-              className="w-[85%] shrink-0 snap-start sm:w-auto"
-            >
-              <SolutionCard {...solution} />
-            </Reveal>
-          ))}
-        </ul>
       </Container>
+
+      {/* Full-width row that glides on its own. Hover or focus pauses it. */}
+      <Reveal delay={0.1} className="mt-14">
+        <div className="group/row relative [mask-image:linear-gradient(to_right,transparent,black_6%,black_94%,transparent)]">
+          <ul
+            className="flex w-max py-4 group-hover/row:[animation-play-state:paused] group-focus-within/row:[animation-play-state:paused]"
+            style={{ animation: `marquee ${SPEED}s linear infinite` }}
+          >
+            {/* The list is rendered twice; sliding exactly half its width loops with no seam. */}
+            {[...items, ...items].map((solution, index) => {
+              const duplicate = index >= items.length;
+              return (
+                <li
+                  key={`${solution.id}-${index}`}
+                  aria-hidden={duplicate || undefined}
+                  className="w-[19rem] shrink-0 pr-5 sm:w-[21rem]"
+                >
+                  <SolutionCard {...solution} duplicate={duplicate} />
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      </Reveal>
     </section>
   );
 }
