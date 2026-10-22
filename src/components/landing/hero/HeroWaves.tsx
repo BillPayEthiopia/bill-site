@@ -1,48 +1,59 @@
-import { FlowingRibbons, type RibbonConfig } from "@/components/ui/FlowingRibbons";
+/*
+ * Three layers of water at the bottom of the hero, echoing the logo's three bands.
+ * Each layer is a repeating wave twice the screen width that drifts sideways forever,
+ * while gently rising and falling. Pure CSS: no JavaScript, very light.
+ */
 
-/** Three ribbons, echoing the logo's three bands. */
-const RIBBONS: RibbonConfig[] = [
-  {
-    shapes: [
-      "M0 150 C 240 90, 420 230, 720 160 S 1200 60, 1440 120",
-      "M0 135 C 260 115, 400 205, 720 175 S 1180 75, 1440 105",
-    ],
-    className: "stroke-navy/6",
-    glowClassName: "stroke-aqua/50",
-    breathe: 9,
-    glowDelay: 0.8,
-    parallax: -24,
-  },
-  {
-    shapes: [
-      "M0 190 C 240 130, 420 270, 720 200 S 1200 100, 1440 160",
-      "M0 178 C 260 152, 400 248, 720 214 S 1180 118, 1440 146",
-    ],
-    className: "stroke-aqua/20",
-    glowClassName: "stroke-blue/35",
-    breathe: 11,
-    glowDelay: 3,
-  },
-  {
-    shapes: [
-      "M0 230 C 240 170, 420 310, 720 240 S 1200 140, 1440 200",
-      "M0 222 C 260 190, 400 288, 720 252 S 1180 158, 1440 188",
-    ],
-    className: "stroke-blue/10",
-    glowClassName: "stroke-aqua/40",
-    breathe: 13,
-    glowDelay: 5.2,
-    parallax: 24,
-  },
+const WIDTH = 2880; // two copies of a 1440 design width, so the drift loops seamlessly
+const HEIGHT = 160;
+
+/** A smooth wave across the full width, filled down to the bottom. */
+function wavePath(baseline: number, amplitude: number, wavelength: number) {
+  const half = wavelength / 2;
+  let d = `M0 ${baseline} Q ${wavelength / 4} ${baseline - amplitude} ${half} ${baseline}`;
+  for (let x = half; x < WIDTH; x += half) d += ` T ${x + half} ${baseline}`;
+  return `${d} L ${WIDTH} ${HEIGHT} L 0 ${HEIGHT} Z`;
+}
+
+type Layer = {
+  baseline: number;
+  amplitude: number;
+  /** Must divide 1440 evenly, so the loop has no seam. */
+  wavelength: number;
+  /** Seconds for one full drift. Slower layers feel further away. */
+  drift: number;
+  reverse?: boolean;
+  /** Seconds for one rise and fall. */
+  bob: number;
+  className: string;
+};
+
+/** Back to front: far and slow, then nearer and quicker. */
+const LAYERS: Layer[] = [
+  { baseline: 64, amplitude: 22, wavelength: 720, drift: 32, bob: 7, className: "fill-aqua/15" },
+  { baseline: 88, amplitude: 16, wavelength: 480, drift: 22, reverse: true, bob: 5.5, className: "fill-blue/10" },
+  { baseline: 112, amplitude: 12, wavelength: 360, drift: 15, bob: 4.5, className: "fill-white" },
 ];
 
 export function HeroWaves() {
   return (
-    <FlowingRibbons
-      ribbons={RIBBONS}
-      viewBox="0 0 1440 260"
-      strokeWidth={36}
-      className="absolute inset-x-0 -bottom-12 h-64 w-full"
-    />
+    <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 bottom-0 h-40 overflow-hidden sm:h-48">
+      {LAYERS.map((layer, index) => (
+        <div
+          key={index}
+          className="absolute inset-0"
+          style={{ animation: `wave-bob ${layer.bob}s ease-in-out ${index * -1.5}s infinite alternate` }}
+        >
+          <div
+            className="absolute inset-y-0 left-0 w-[200%]"
+            style={{ animation: `wave-drift ${layer.drift}s linear infinite${layer.reverse ? " reverse" : ""}` }}
+          >
+            <svg viewBox={`0 0 ${WIDTH} ${HEIGHT}`} preserveAspectRatio="none" className="size-full">
+              <path d={wavePath(layer.baseline, layer.amplitude, layer.wavelength)} className={layer.className} />
+            </svg>
+          </div>
+        </div>
+      ))}
+    </div>
   );
 }

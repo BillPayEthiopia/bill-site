@@ -115,6 +115,18 @@
   }
 }
 
+/* Hero waves: endless sideways drift (the wave shape repeats, so -50% loops seamlessly) */
+@keyframes wave-drift {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+/* Hero waves: a slow rise and fall, like a swell */
+@keyframes wave-bob {
+  from { transform: translateY(0); }
+  to { transform: translateY(10px); }
+}
+
 /* ============================================================
    TYPOGRAPHY
    ============================================================ */
