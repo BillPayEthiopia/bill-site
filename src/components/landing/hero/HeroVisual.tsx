@@ -11,55 +11,49 @@ import {
 } from "react";
 import { motion, useInView, useMotionValue, useReducedMotion, useSpring, useTransform } from "motion/react";
 import { Float } from "@/components/animations/Float";
-import {
-  heroDemo,
-  METHOD_LABELS,
-  type CheckoutStage,
-  type DemoTransaction,
-  type PosStage,
-} from "@/content/hero";
+import { heroDemo, METHOD_LABELS, type DemoTransaction, type PosStage } from "@/content/hero";
 import { EASE_BRAND } from "@/lib/motion";
 import { DashboardScreen } from "./devices/DashboardScreen";
 import { Laptop } from "./devices/Laptop";
 import { PosTerminal } from "./devices/PosTerminal";
-import { Smartphone } from "./devices/Smartphone";
 import { Tablet } from "./devices/Tablet";
 import { TabletScreen } from "./devices/TabletScreen";
-import { PhoneCheckout } from "./PhoneCheckout";
 
-/** Phone checkout timing, in ms. One full payment takes 7.4s. */
-const STAGE_MS: Record<CheckoutStage, number> = { select: 2800, processing: 1400, success: 3200 };
-/** POS runs on the same 7.4s rhythm, offset so its payments land between the phone's. */
+/** Online payments land on the dashboard every 7.4s; the first one sooner. */
+const ONLINE_MS = { first: 3700, every: 7400 };
+/** POS payments land between the online ones. */
 const POS_MS = { firstReady: 7900, ready: 3300, approved: 4100 };
 
-type DeviceId = "laptop" | "tablet" | "pos" | "phone";
+type DeviceId = "laptop" | "tablet" | "pos";
 type Placement = { x: number; y: number; scale?: number };
-type Composition = { width: number; height: number; place: Partial<Record<DeviceId, Placement>> };
+type Composition = { width: number; height: number; place: Record<DeviceId, Placement> };
 
 /*
  * Design canvases. Devices are drawn at real size and positioned in px,
  * then the whole canvas is scaled to fit the column.
+ *
+ * The laptop is the centered anchor. The POS (left) and tablet (right) come
+ * forward at the bottom corners, covering only the laptop's edges, so its
+ * chart and payments list stay readable.
  */
 const FULL: Composition = {
-  width: 810,
-  height: 585,
+  width: 760,
+  height: 510,
   place: {
-    laptop: { x: 150, y: 10 },
-    // Tablet and POS rise over the lower part of the laptop screen
-    tablet: { x: 492, y: 168 },
-    pos: { x: 298, y: 168 },
-    phone: { x: 20, y: 100 },
+    laptop: { x: 80, y: 0 },
+    pos: { x: 100, y: 216, scale: 0.8 },
+    tablet: { x: 486, y: 300, scale: 0.85 },
   },
 };
 
-/** Phones: no tablet, a smaller laptop behind, so the phone stays readable. */
+/** Phones: the same arrangement, smaller. */
 const COMPACT: Composition = {
   width: 420,
-  height: 540,
+  height: 400,
   place: {
-    laptop: { x: 60, y: 0, scale: 0.6 },
-    pos: { x: 268, y: 165, scale: 0.7 },
-    phone: { x: 16, y: 100, scale: 0.9 },
+    laptop: { x: 24, y: 0, scale: 0.62 },
+    pos: { x: 100, y: 168, scale: 0.62 },
+    tablet: { x: 226, y: 250, scale: 0.6 },
   },
 };
 
@@ -93,7 +87,7 @@ function useComposition() {
 }
 
 type DeviceProps = {
-  place?: Placement;
+  place: Placement;
   depth: number;
   delay: number;
   float?: { distance: number; duration: number; delay: number };
@@ -102,7 +96,6 @@ type DeviceProps = {
 
 /** Positions one device, rises it in on load, and optionally floats it. */
 function Device({ place, depth, delay, float, children }: DeviceProps) {
-  if (!place) return null;
   return (
     <motion.div
       className="absolute origin-top-left"
@@ -135,28 +128,23 @@ export function HeroVisual() {
     setCount((current) => current + 1);
   }, []);
 
-  // ---- Phone: select → processing → success → next order ----
-  const [stage, setStage] = useState<CheckoutStage>("select");
-  const [cycle, setCycle] = useState(0);
-  const order = heroDemo.orders[cycle % heroDemo.orders.length];
+  // ---- Online payments: arrive on the dashboard on a steady rhythm ----
+  const [onlineCycle, setOnlineCycle] = useState(0);
 
   useEffect(() => {
     if (!live) return;
-    const timer = window.setTimeout(() => {
-      if (stage === "select") {
-        setStage("processing");
-      } else if (stage === "processing") {
-        setStage("success");
+    const timer = window.setTimeout(
+      () => {
+        const order = heroDemo.orders[onlineCycle % heroDemo.orders.length];
         record(order.amount, METHOD_LABELS[order.method]);
-      } else {
-        setStage("select");
-        setCycle((current) => current + 1);
-      }
-    }, STAGE_MS[stage]);
+        setOnlineCycle((current) => current + 1);
+      },
+      onlineCycle === 0 ? ONLINE_MS.first : ONLINE_MS.every,
+    );
     return () => window.clearTimeout(timer);
-  }, [live, stage, order, record]);
+  }, [live, onlineCycle, record]);
 
-  // ---- POS: tap to pay → approved, offset from the phone ----
+  // ---- POS: tap to pay → approved ----
   const [posStage, setPosStage] = useState<PosStage>("ready");
   const [posCycle, setPosCycle] = useState(0);
   const posAmount = heroDemo.posOrders[posCycle % heroDemo.posOrders.length];
@@ -177,8 +165,7 @@ export function HeroVisual() {
     return () => window.clearTimeout(timer);
   }, [live, posStage, posCycle, posAmount, record]);
 
-  // Reduced motion: show the finished, successful states, standing still.
-  const phoneShown: CheckoutStage = reduceMotion ? "success" : stage;
+  // Reduced motion: show the finished, successful state, standing still.
   const posShown: PosStage = reduceMotion ? "approved" : posStage;
   const today = heroDemo.todayBase + (total - heroDemo.baseVolume);
 
@@ -208,7 +195,7 @@ export function HeroVisual() {
       aria-hidden="true"
       onPointerMove={handlePointerMove}
       onPointerLeave={resetTilt}
-      className="relative mx-auto aspect-[420/540] w-full max-w-[26rem] sm:aspect-[810/585] sm:max-w-[44rem] lg:max-w-none"
+      className="relative mx-auto aspect-[420/400] w-full max-w-[26rem] sm:aspect-[760/510] sm:max-w-[44rem] lg:max-w-none"
     >
       {/* Glows behind the devices */}
       <div className="pointer-events-none absolute inset-[12%] rounded-full bg-aqua/25 blur-3xl" />
@@ -226,20 +213,14 @@ export function HeroVisual() {
             </Laptop>
           </Device>
 
-          <Device place={comp.place.tablet} depth={20} delay={0.55} float={{ distance: 6, duration: 7, delay: 1.2 }}>
+          <Device place={comp.place.tablet} depth={20} delay={0.45} float={{ distance: 6, duration: 7, delay: 1.2 }}>
             <Tablet>
               <TabletScreen today={today} />
             </Tablet>
           </Device>
 
-          <Device place={comp.place.pos} depth={30} delay={0.75} float={{ distance: 6, duration: 5.5, delay: 2 }}>
+          <Device place={comp.place.pos} depth={30} delay={0.65} float={{ distance: 7, duration: 5.5, delay: 0 }}>
             <PosTerminal stage={posShown} amount={posAmount} />
-          </Device>
-
-          <Device place={comp.place.phone} depth={40} delay={0.35} float={{ distance: 10, duration: 6, delay: 0 }}>
-            <Smartphone>
-              <PhoneCheckout stage={phoneShown} order={order} />
-            </Smartphone>
           </Device>
         </motion.div>
       </div>

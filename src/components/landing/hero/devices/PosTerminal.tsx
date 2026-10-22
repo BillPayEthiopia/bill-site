@@ -10,7 +10,7 @@ import { cn, formatETB } from "@/lib/utils";
 
 /**
  * The terminal lies back and turns slightly, like a device resting on a counter:
- * the printer end recedes, the card end comes toward you.
+ * the printer end recedes, the keypad end comes toward you.
  */
 const SLANT: CSSProperties = {
   transform: "perspective(900px) rotateX(22deg) rotateZ(12deg)",
@@ -52,7 +52,7 @@ function Contactless({ pulse = false, className }: { pulse?: boolean; className?
   );
 }
 
-/** A countertop card terminal: printer head, recessed screen, raised keypad, card in the slot. About 150×345. */
+/** A countertop card terminal: printer head, recessed screen, raised keypad. About 150×345. */
 export function PosTerminal({ stage, amount }: { stage: PosStage; amount: number }) {
   const approved = stage === "approved";
 
@@ -167,24 +167,8 @@ export function PosTerminal({ stage, amount }: { stage: PosStage; amount: number
           </span>
         </div>
 
-        {/* Card slot */}
+        {/* Card slot (empty) */}
         <span className="absolute inset-x-[24px] bottom-[12px] h-[4px] rounded-full bg-[#2a2e35] shadow-[inset_0_1px_2px_rgb(0_0_0/0.7),0_1px_0_rgb(255_255_255/0.6)]" />
-
-        {/* Card coming out of the slot; clipped at the slot so it looks inserted */}
-        <div className="absolute left-1/2 top-[calc(100%-14px)] h-[64px] w-[100px] -translate-x-1/2 overflow-hidden">
-          <motion.div
-            className="absolute inset-x-0 top-0 h-[63px] overflow-hidden rounded-[6px] bg-linear-to-br from-blue via-[#2a5596] to-navy"
-            initial={false}
-            animate={{ y: approved ? -22 : -4 }}
-            transition={{ duration: 0.6, ease: EASE_BRAND }}
-          >
-            <span className="absolute inset-0 bg-[linear-gradient(115deg,transparent_35%,rgb(255_255_255/0.22)_45%,transparent_55%)]" />
-            <span className="absolute bottom-[10px] left-[10px] font-display text-[7px] font-semibold tracking-[0.18em] text-white/85">
-              •••• 4821
-            </span>
-            <Contactless className="absolute bottom-[8px] right-[8px] size-[11px] text-white/70" />
-          </motion.div>
-        </div>
       </div>
     </div>
   );

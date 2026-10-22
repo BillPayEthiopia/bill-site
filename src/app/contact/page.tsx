@@ -11,6 +11,7 @@ export const metadata: Metadata = {
   description: "Talk to the Billpay team about merchant accounts, government collections, partnerships, or developer access.",
 };
 
+
 export default function ContactPage() {
   const { hero } = contactPage;
 
