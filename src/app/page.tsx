@@ -6,11 +6,13 @@ import { Products } from "@/components/landing/products/Products";
 import { Security } from "@/components/landing/security/Security";
 import { Solutions } from "@/components/landing/Solutions";
 import { ValueProposition } from "@/components/landing/ValueProposition";
+import { PartnerStrip } from "@/components/landing/PartnerStrip";
 
 export default function Home() {
   return (
     <main id="main">
       <Hero />
+      <PartnerStrip />
       <ValueProposition />
       <Products />
       <Solutions />

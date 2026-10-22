@@ -36,6 +36,7 @@ type Composition = { width: number; height: number; place: Record<DeviceId, Plac
  * forward at the bottom corners, covering only the laptop's edges, so its
  * chart and payments list stay readable.
  */
+
 const FULL: Composition = {
   width: 760,
   height: 510,

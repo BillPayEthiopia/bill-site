@@ -1,14 +1,12 @@
-import Image from "next/image";
 import { Reveal } from "@/components/animations/Reveal";
 import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { SpotlightCard } from "@/components/ui/SpotlightCard";
 import { valueProposition } from "@/content/valueProposition";
-import { cn } from "@/lib/utils";
 
 export function ValueProposition() {
-  const { eyebrow, title, description, cta, features, methods } = valueProposition;
+  const { eyebrow, title, description, cta, features } = valueProposition;
 
   return (
     <section
@@ -71,51 +69,6 @@ export function ValueProposition() {
           ))}
         </ul>
 
-        
-        {methods.length > 0 && (
-          <Reveal className="mt-24 border-t border-line pt-12">
-            <p className="text-center font-display text-xs font-semibold uppercase tracking-[0.16em] text-navy/60">
-              Works with
-            </p>
-
-            <div className="group relative mt-10 overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)]">
-              <ul className="flex w-max animate-marquee items-center group-hover:[animation-play-state:paused]">
-                {[...methods, ...methods].map(({ label, icon: Icon, logo, size = "md" }, index) => (
-                  <li
-                    key={`${label}-${index}`}
-                    aria-hidden={index >= methods.length}
-                    className={cn(
-                      "flex shrink-0 items-center px-10 lg:px-14",
-                      logo
-                        ? "opacity-80 transition-opacity duration-300 hover:opacity-100"
-                        : "text-sm font-medium text-navy",
-                    )}
-                  >
-                    {logo ? (
-                      <Image
-                        src={logo}
-                        alt={label}
-                        width={200}
-                        height={60}
-                        className={cn(
-                          "w-auto object-contain",
-                          size === "sm" && "h-7 max-w-36",
-                          size === "md" && "h-10 max-w-40",
-                          size === "lg" && "h-14 max-w-44",
-                        )}
-                      />
-                    ) : (
-                      <span className="flex items-center gap-2 rounded-full border border-line bg-surface px-4 py-2">
-                        <Icon className="size-4 text-blue" aria-hidden="true" />
-                        {label}
-                      </span>
-                    )}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </Reveal>
-        )}
       </Container>
     </section>
   );
