@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 const delay = (ms: number): CSSProperties => ({ animationDelay: `${ms}ms` });
 
 export function HeroCopy() {
-  const { eyebrow, headline, description, primaryCta, secondaryCta, paymentMethods } = heroContent;
+  const { eyebrow, headline, description, primaryCta, secondaryCta } = heroContent;
 
   return (
     <div className="@container w-full max-w-[38rem]">
@@ -22,9 +22,8 @@ export function HeroCopy() {
         {eyebrow}
       </p>
 
-
       {/* Each line slides up from behind its own mask */}
-        <h1 id="hero-title" className="mt-6 text-hero font-bold short:mt-5">
+      <h1 id="hero-title" className="mt-6 text-hero font-bold short:mt-5">
         {headline.map((line, index) => (
           <span
             key={line.text}
@@ -73,17 +72,6 @@ export function HeroCopy() {
           {secondaryCta.label}
         </Button>
       </div>
-
-      <ul className="mt-10 flex animate-fade-up flex-wrap gap-x-5 gap-y-3" style={delay(700)}>
-        {paymentMethods.map(({ label, icon: Icon }) => (
-          <li key={label} className="flex items-center gap-2 text-sm">
-            <span className="flex size-8 items-center justify-center rounded-lg border border-line bg-white text-blue shadow-sm">
-              <Icon className="size-4" aria-hidden="true" />
-            </span>
-            {label}
-          </li>
-        ))}
-      </ul>
     </div>
   );
 }

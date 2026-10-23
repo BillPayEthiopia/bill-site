@@ -27,7 +27,7 @@ export async function Footer() {
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10">
         <div className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-aqua to-transparent" />
         <div className="absolute inset-0 bg-[radial-gradient(circle,rgb(255_255_255/0.06)_1px,transparent_1px)] bg-[size:22px_22px] [mask-image:radial-gradient(ellipse_50%_60%_at_100%_100%,black,transparent)]" />
-        <div className="absolute -bottom-48 -right-32 size-[34rem] rounded-full bg-blue/20 blur-3xl" />
+        <div className="absolute -bottom-48 -right-32 size-136 rounded-full bg-blue/20 blur-3xl" />
         <Waves tone="dark" className="absolute inset-x-0 bottom-0 h-44 sm:h-56" />
       </div>
    

@@ -14,11 +14,10 @@ export function HeroBackground() {
       <div className="absolute -right-40 -top-40 size-[42rem] rounded-full bg-aqua/20 blur-3xl" />
       <div className="absolute -left-48 top-1/3 size-[32rem] rounded-full bg-blue/10 blur-3xl" />
 
-      {/* Three ribbons, echoing the logo's three bands */}
-      <HeroWaves />
-
-      {/* Fade the bottom edge into the next section */}
-      <div className="absolute inset-x-0 bottom-0 h-32 bg-linear-to-t from-white to-transparent" />
+      {/* Ribbons: faded at the top (under the logos) and the bottom (into the next section), so no edge shows */}
+      <div className="absolute inset-x-0 bottom-0 h-72 [mask-image:linear-gradient(to_bottom,transparent,black_35%,black_60%,transparent)]">
+        <HeroWaves />
+      </div>
     </div>
   );
 }

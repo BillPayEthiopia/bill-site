@@ -12,7 +12,6 @@ export default function Home() {
   return (
     <main id="main">
       <Hero />
-      <PartnerStrip />
       <ValueProposition />
       <Products />
       <Solutions />

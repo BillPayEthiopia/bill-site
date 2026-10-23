@@ -1,6 +1,4 @@
-import type { LucideIcon } from "lucide-react";
 import { SIGN_UP_URL } from "./navigation";
-import { CreditCard, Landmark, Link as LinkIcon, QrCode, Smartphone, Store, Wallet } from "lucide-react";
 
 export const heroContent = {
   eyebrow: "Payment gateway for modern businesses",
@@ -11,19 +9,9 @@ export const heroContent = {
     { text: "payments.", highlight: true, underline: true },
   ] as { text: string; highlight?: boolean; underline?: boolean }[],
   description:
-    "Billpay is a payment gateway that helps businesses accept payments, manage transactions, and grow. all in one place.",
+    "Billpay is a payment gateway that helps businesses accept payments, manage transactions, and grow, all in one place.",
   primaryCta: { label: "Get started", href: SIGN_UP_URL },
   secondaryCta: { label: "Explore products", href: "/products" },
-
-  paymentMethods: [
-    { label: "Cards", icon: CreditCard },
-    { label: "Bank transfers", icon: Landmark },
-    { label: "Mobile money", icon: Smartphone },
-    { label: "Wallets", icon: Wallet },
-    { label: "QR codes", icon: QrCode },
-    { label: "Payment links", icon: LinkIcon },
-    { label: "In-store POS", icon: Store },
-  ] satisfies { label: string; icon: LucideIcon }[],
 };
 
 /* ----------------------------------------------------------------
