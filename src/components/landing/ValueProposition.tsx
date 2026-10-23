@@ -12,7 +12,7 @@ export function ValueProposition() {
     <section
       id="why-billpay"
       aria-labelledby="why-billpay-title"
-      className="relative overflow-hidden bg-white py-24 lg:py-32"
+      className="relative overflow-hidden bg-white pb-20 pt-16 lg:pb-24 lg:pt-20"
     >
       {/* Faint glow in the corner, so the white section isn't flat */}
       <div
@@ -20,7 +20,7 @@ export function ValueProposition() {
         className="pointer-events-none absolute -left-40 top-0 -z-10 size-[30rem] rounded-full bg-blue-50 blur-3xl"
       />
 
-           <Container>
+      <Container>
         <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
           <Reveal>
             <SectionHeading
@@ -68,7 +68,6 @@ export function ValueProposition() {
             </Reveal>
           ))}
         </ul>
-
       </Container>
     </section>
   );

@@ -9,7 +9,7 @@ export function Solutions() {
   const { eyebrow, title, description, cta } = solutionsContent;
 
   return (
-    <section id="solutions" aria-labelledby="solutions-title" className="overflow-hidden bg-surface py-24 lg:py-32">
+    <section id="solutions" aria-labelledby="solutions-title" className="overflow-hidden bg-surface py-20 lg:py-24">
       <Container>
         <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
           <Reveal>

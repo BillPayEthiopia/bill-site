@@ -9,7 +9,7 @@ export function HowItWorks() {
   const { eyebrow, title, description, primaryCta, secondaryCta } = howItWorksContent;
 
   return (
-    <section id="how-it-works" aria-labelledby="how-it-works-title" className="bg-white py-24 lg:py-32">
+    <section id="how-it-works" aria-labelledby="how-it-works-title" className="bg-white py-20 lg:py-24">
       <Container>
         <Reveal>
           <SectionHeading
@@ -27,11 +27,11 @@ export function HowItWorks() {
           />
         </Reveal>
 
-        <div className="mx-auto mt-16 max-w-5xl">
+        <div className="mx-auto mt-14 max-w-5xl">
           <StepsTimeline />
         </div>
 
-        <Reveal className="mt-16 flex flex-wrap justify-center gap-3">
+        <Reveal className="mt-14 flex flex-wrap justify-center gap-3">
           <Button href={primaryCta.href} size="lg" arrow>
             {primaryCta.label}
           </Button>
