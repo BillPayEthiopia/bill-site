@@ -24,13 +24,19 @@ const ONLINE_MS = { first: 3700, every: 7400 };
 /** POS payments land between the online ones. */
 const POS_MS = { firstReady: 7900, ready: 3300, approved: 4100 };
 
+/**
+ * Resting tilt in degrees. The side under the headline leans away, so the devices
+ * feel like they sit behind the text. Set both to 0 for a flat look.
+ */
+const BASE_TILT = { x: 0, y: 0 };
+
 type DeviceId = "laptop" | "tablet" | "pos";
 type Placement = { x: number; y: number; scale?: number };
 type Composition = { width: number; height: number; place: Record<DeviceId, Placement> };
 
 /*
  * Design canvases. Devices are drawn at real size and positioned in px,
- * then the whole canvas is scaled to fit the column.
+ * then the whole canvas is scaled to fit the stage.
  *
  * The laptop is the centered anchor. The POS (left) and tablet (right) come
  * forward at the bottom corners, covering only the laptop's edges, so its
@@ -57,7 +63,6 @@ const COMPACT: Composition = {
     tablet: { x: 226, y: 210, scale: 0.6 },
   },
 };
-
 
 /** Picks the composition for this screen and scales it to the stage's width. */
 function useComposition() {
@@ -171,12 +176,12 @@ export function HeroVisual() {
   const posShown: PosStage = reduceMotion ? "approved" : posStage;
   const today = heroDemo.todayBase + (total - heroDemo.baseVolume);
 
-  // ---- Gentle 3D tilt toward the mouse ----
+  // ---- 3D tilt: a resting angle, plus a gentle lean toward the mouse ----
   const pointerX = useMotionValue(0);
   const pointerY = useMotionValue(0);
   const spring = { stiffness: 150, damping: 20, mass: 0.5 };
-  const rotateY = useSpring(useTransform(pointerX, [-0.5, 0.5], [-6, 6]), spring);
-  const rotateX = useSpring(useTransform(pointerY, [-0.5, 0.5], [5, -5]), spring);
+  const rotateY = useSpring(useTransform(pointerX, [-0.5, 0.5], [BASE_TILT.y - 5, BASE_TILT.y + 5]), spring);
+  const rotateX = useSpring(useTransform(pointerY, [-0.5, 0.5], [BASE_TILT.x + 4, BASE_TILT.x - 4]), spring);
 
   function handlePointerMove(event: PointerEvent<HTMLDivElement>) {
     if (reduceMotion || event.pointerType !== "mouse") return;
@@ -199,7 +204,6 @@ export function HeroVisual() {
       onPointerLeave={resetTilt}
       className="relative mx-auto aspect-[420/420] w-full max-w-[26rem] sm:aspect-[760/490] sm:max-w-[44rem] lg:max-w-none"
     >
-
       {/* Glows behind the devices */}
       <div className="pointer-events-none absolute inset-[12%] rounded-full bg-aqua/25 blur-3xl" />
       <div className="pointer-events-none absolute right-0 top-0 size-1/3 rounded-full bg-blue/15 blur-3xl" />

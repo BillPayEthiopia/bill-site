@@ -17,8 +17,7 @@ export function Hero() {
         <HeroVisual />
       </Container>
 
-      {/* Fades in right after the buttons */}
-      <PartnerStrip className="mt-16 lg:mt-20 short:mt-12" style={{ animationDelay: "800ms" }} />
+      <PartnerStrip className="mt-14 lg:mt-16 short:mt-10" style={{ animationDelay: "800ms" }} />
     </section>
   );
 }
