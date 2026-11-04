@@ -64,9 +64,7 @@ export const valueProposition = {
 
   methods: [
     { label: "telebirr", icon: Smartphone, logo: "/partners/telebirr.svg" },
-    { label: "CBE Birr", icon: Smartphone, logo: "/partners/cbe-birr.svg" },
     { label: "M-Pesa", icon: Smartphone, logo: "/partners/mpesa.svg" },
-    { label: "Commercial Bank of Ethiopia", icon: Landmark, logo: "/partners/Commercial-Bank-of-Ethiopia.svg", size: "lg" },
     { label: "Visa", icon: CreditCard, logo: "/partners/visa.svg", size: "sm" },
     { label: "Mastercard", icon: CreditCard, logo: "/partners/mastercard.svg", size: "lg" },
     { label: "Bank of Abyssinia", icon: Landmark, logo: "/partners/abyssinia.svg", size: "md" },
