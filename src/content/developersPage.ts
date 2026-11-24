@@ -11,6 +11,7 @@ import {
   Terminal,
 } from "lucide-react";
 import type { CardItem } from "@/components/page/CardGrid";
+import { DEVELOPER_GUIDE_URL } from "./navigation";
 
 /*
  * ⚠️ TO CONFIRM WITH THE BILLPAY TECH TEAM:
@@ -233,13 +234,13 @@ BILLPAY_SECRET_KEY=your_live_secret_key`,
         description:
           "Guides for every integration, from checkout to settlements.",
         icon: BookOpen,
-        href: "/contact",
+        href: DEVELOPER_GUIDE_URL,
       },
       {
         title: "API reference",
         description: "Every endpoint, parameter, and response.",
         icon: Terminal,
-        href: "/contact",
+        href: `${DEVELOPER_GUIDE_URL}/payments/accept-payment/`,
       },
       {
         title: "Sandbox access",

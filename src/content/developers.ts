@@ -1,5 +1,6 @@
 import type { LucideIcon } from "lucide-react";
 import { BellRing, BookOpen, FlaskConical, LifeBuoy } from "lucide-react";
+import { DEVELOPER_GUIDE_URL } from "./navigation";
 
 /*
  * ⚠️ TO CONFIRM WITH THE BILLPAY TECH TEAM:
@@ -15,7 +16,7 @@ export const developersContent = {
   description:
     "An API-first platform with a dedicated sandbox and clear guides. Create a payment, send your customer to checkout, and get notified the moment it lands.",
   primaryCta: { label: "Start the quickstart", href: "/developers#quickstart" },
-  secondaryCta: { label: "Developer guide", href: "/developers" },
+  secondaryCta: { label: "Developer guide", href: DEVELOPER_GUIDE_URL },
 
   benefits: [
     { title: "Clear documentation", description: "Step-by-step guides and copy-paste examples.", icon: BookOpen },

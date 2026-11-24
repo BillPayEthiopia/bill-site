@@ -2,6 +2,7 @@ import type { LucideIcon } from "lucide-react";
 import {
   Banknote,
   BookOpen,
+  BookText,
   Briefcase,
   Building,
   CreditCard,
@@ -22,8 +23,17 @@ import {
   Wallet,
 } from "lucide-react";
 
-/** "Get started" target. Points to the coming-soon page until merchant sign-up opens; restore the merchant portal URL to re-enable it. */
-export const SIGN_UP_URL = "/coming-soon";
+/** The merchant portal, where merchants sign up and sign in. */
+export const MERCHANT_PORTAL_URL = "https://merchant.billpay.et";
+
+/** "Get started" target: merchant sign-up on the merchant portal. */
+export const SIGN_UP_URL = `${MERCHANT_PORTAL_URL}/sign-up`;
+
+/** "Sign in" target: the merchant portal's sign-in page. */
+export const SIGN_IN_URL = `${MERCHANT_PORTAL_URL}/sign-in`;
+
+/** The developer guide: integration docs, API usage, testing and go-live. */
+export const DEVELOPER_GUIDE_URL = "https://developer.billpay.et";
 
 export type NavItem = {
   label: string;
@@ -145,6 +155,12 @@ export const navGroups: NavGroup[] = [
     href: "/developers",
     items: [
       {
+        label: "Developer guide",
+        href: DEVELOPER_GUIDE_URL,
+        icon: BookText,
+        description: "Full integration docs: authentication, payments, webhooks, and going live.",
+      },
+      {
         label: "How payments work",
         href: "/developers#flow",
         icon: GitBranch,
@@ -183,7 +199,7 @@ export const navGroups: NavGroup[] = [
 ];
 
 export const navActions = {
-  /** Set to the dashboard URL when it exists. The link stays hidden while this is null. */
-  signIn: null as string | null,
+  /** Merchant portal sign-in. Set to null to hide the link. */
+  signIn: SIGN_IN_URL as string | null,
   getStarted: SIGN_UP_URL,
 };
