@@ -22,7 +22,8 @@ import {
   Wallet,
 } from "lucide-react";
 
-export const SIGN_UP_URL = "https://merchant.billpay.et/sign-up";
+/** "Get started" target. Points to the coming-soon page until merchant sign-up opens; restore the merchant portal URL to re-enable it. */
+export const SIGN_UP_URL = "/coming-soon";
 
 export type NavItem = {
   label: string;
