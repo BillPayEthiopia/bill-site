@@ -1,0 +1,14 @@
+node_modules
+.next
+out
+.git
+.gitignore
+.env
+.env.*
+creadential.md
+*.md
+Dockerfile
+.dockerignore
+docker-compose.yml
+Caddyfile
+npm-debug.log*

@@ -1,0 +1,30 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: billpay-website:latest
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+    # Not published to the host: traffic goes through Caddy only.
+    expose:
+      - "3000"
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:3000/"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    depends_on:
+      app:
+        condition: service_healthy
+    # Plain HTTP only. Domain, TLS and SSH are handled by the external nginx proxy.
+    ports:
+      - "3004:80"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
